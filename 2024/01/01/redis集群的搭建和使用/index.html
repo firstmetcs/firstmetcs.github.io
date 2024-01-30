@@ -1,0 +1,882 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/f.png">
+  <link rel="icon" href="/img/f.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="firstmetcs">
+  <meta name="keywords" content="Fsmt blog,共同进步 Fsmt,Fsmt,fsmt,firstmetcs">
+  
+    <meta name="description" content="本篇知识分享主要讲述使用docker搭建redis集群，其中包含redis简单主从模式、哨兵模式和springboot整合redis集群等，适合初学者入门搭建和使用参考。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis集群的搭建和使用">
+<meta property="og:url" content="https://blog.firstmetcs.net/2024/01/01/redis%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="Fsmt blog">
+<meta property="og:description" content="本篇知识分享主要讲述使用docker搭建redis集群，其中包含redis简单主从模式、哨兵模式和springboot整合redis集群等，适合初学者入门搭建和使用参考。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041646180484.jpg">
+<meta property="article:published_time" content="2024-01-01T10:30:20.000Z">
+<meta property="article:modified_time" content="2024-01-02T03:06:37.000Z">
+<meta property="article:author" content="firstmetcs">
+<meta property="article:tag" content="原创">
+<meta property="article:tag" content="Redis">
+<meta property="article:tag" content="Redis sentinel">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041646180484.jpg">
+  
+  
+  
+  <title>redis集群的搭建和使用 - Fsmt blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.firstmetcs.net","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"cedb334c71d9c14c4f0337d5e60aa43c","google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+    <!-- Baidu Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?cedb334c71d9c14c4f0337d5e60aa43c";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+      }
+    </script>
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="Fsmt blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fsmt blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041646180484.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="redis集群的搭建和使用"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-01-01 18:30" pubdate>
+          2024年1月1日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">redis集群的搭建和使用</h1>
+            
+              <p id="updated-time" class="note note-info" style="">
+                
+                  
+                    本文最后更新于 2024年1月2日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本篇知识分享主要讲述使用docker搭建redis集群，其中包含redis简单主从模式、哨兵模式和springboot整合redis集群等，适合初学者入门搭建和使用参考。</p>
+<h2 id="基础服务环境"><a href="#基础服务环境" class="headerlink" title="基础服务环境"></a>基础服务环境</h2><p>本篇教程基于docker容器化搭建redis集群，需要使用docker环境。<br>基础环境细节如下：</p>
+<ul>
+<li>Docker环境</li>
+<li>Redis环境（docker latest）</li>
+<li>Java环境</li>
+<li>Maven环境</li>
+</ul>
+<h3 id="搭建docker环境"><a href="#搭建docker环境" class="headerlink" title="搭建docker环境"></a>搭建docker环境</h3><ul>
+<li>卸载旧版本<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">yum remove docker docker-common docker-selinux<br></code></pre></td></tr></table></figure></li>
+<li>安装需要的依赖包<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">yum install -y yum-utils device-mapper-persistent-data<br></code></pre></td></tr></table></figure></li>
+<li>配置稳定仓库<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo<br></code></pre></td></tr></table></figure></li>
+<li>安装<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">yum install docker-ce<br></code></pre></td></tr></table></figure></li>
+<li>启动docker<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl start docker<br></code></pre></td></tr></table></figure></li>
+<li>验证安装是否成功<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker -v<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="docker环境配置"><a href="#docker环境配置" class="headerlink" title="docker环境配置"></a>docker环境配置</h3><p>为避免docker容器运行时使用基于docker的局域网环境信息导致后续的springboot使用哨兵模式调用失败，启动时需要添加net网络模式选项：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">–<span class="hljs-attribute">net</span>=host<br></code></pre></td></tr></table></figure>
+<p>这样容器就和宿主机共用网络</p>
+<h1 id="Redis简单主从模式"><a href="#Redis简单主从模式" class="headerlink" title="Redis简单主从模式"></a>Redis简单主从模式</h1><h2 id="搭建基础redis环境"><a href="#搭建基础redis环境" class="headerlink" title="搭建基础redis环境"></a>搭建基础redis环境</h2><h3 id="获取redis镜像"><a href="#获取redis镜像" class="headerlink" title="获取redis镜像"></a>获取redis镜像</h3><p>下面的命令会拉取最新的官方版本的redis镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull redis<br></code></pre></td></tr></table></figure>
+<p>查看镜像<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041566160538.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="获取并修改redis配置文件"><a href="#获取并修改redis配置文件" class="headerlink" title="获取并修改redis配置文件"></a>获取并修改redis配置文件</h3><p>下面的命令会拉取最新的官方版本的redis镜像<br>redis官方提供了一个配置文件样例，通过wget工具下载下来。我用的root用户，就直接下载到用户主目录里了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget http://download.redis.io/redis-stable/redis.conf<br></code></pre></td></tr></table></figure>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041567128278.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>配置文件修改以下几项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs conf"># 注释这一行，表示Redis可以接受任意ip的连接<br># bind 127.0.0.1 <br><br># 关闭保护模式<br>protected-mode no <br><br># 设定密码(可选，如果这里开启了密码要求，slave的配置里就要加这个密码. 只是练习配置，就不使用密码认证了)<br># requirepass masterpassword <br><br># 配置日志路径，为了便于排查问题，指定redis的日志文件目录<br>logfile &quot;/var/log/redis/redis.log&quot;<br></code></pre></td></tr></table></figure>
+<h3 id="使用配置文件启动redis环境"><a href="#使用配置文件启动redis环境" class="headerlink" title="使用配置文件启动redis环境"></a>使用配置文件启动redis环境</h3><p>启动时复制配置文件到容器中并使用配置文件启动redis server</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -d -p 6379:6379 --name redis -v /hzero/repo/redis/redis-master.conf:/usr/local/redis.conf redis redis-server /usr/local/redis.conf<br></code></pre></td></tr></table></figure>
+<p>其中&#x2F;hzero&#x2F;repo&#x2F;redis&#x2F;redis-master.conf为下载并修改的配置文件的位置，&#x2F;usr&#x2F;local&#x2F;redis.conf是docker容器中配置文件的位置，redis-server &#x2F;usr&#x2F;local&#x2F;redis.conf表示在容器启动时使用配置文件启动redis server</p>
+<h3 id="注意的坑"><a href="#注意的坑" class="headerlink" title="注意的坑"></a>注意的坑</h3><p>有时候会发现docker使用配置文件启动redis启动失败了，其实并不是启动失败了，而是配置文件中添加了以下配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs conf"># 让redis服务后台运行<br>daemonize yes<br></code></pre></td></tr></table></figure>
+<p>daemonize yes，他的作用是是否开启守护进程模式，在该模式下，redis会在后台运行，并将进程pid号写入至redis.conf选项pidfile设置的文件中，此时redis将一直运行，除非手动kill该进程<br>那么通过配置文件的方式启动redis肯定就无法开启守护进程模式，所以导致配置文件中daemonize yes的情况下，无法通过配置文件启动</p>
+<h2 id="搭建主从模式redis集群"><a href="#搭建主从模式redis集群" class="headerlink" title="搭建主从模式redis集群"></a>搭建主从模式redis集群</h2><h3 id="修改主节点master配置"><a href="#修改主节点master配置" class="headerlink" title="修改主节点master配置"></a>修改主节点master配置</h3><p>配置文件修改以下几项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs conf"># 注释这一行，表示Redis可以接受任意ip的连接<br># bind 127.0.0.1 <br><br># 关闭保护模式<br>protected-mode no <br><br># 设定密码(可选，如果这里开启了密码要求，slave的配置里就要加这个密码. 只是练习配置，就不使用密码认证了)<br># requirepass masterpassword <br><br># 配置日志路径，为了便于排查问题，指定redis的日志文件目录<br>logfile &quot;/var/log/redis/redis.log&quot;<br></code></pre></td></tr></table></figure>
+<h3 id="修改从节点slave配置"><a href="#修改从节点slave配置" class="headerlink" title="修改从节点slave配置"></a>修改从节点slave配置</h3><p>配置文件修改以下几项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs conf"># 注释这一行，表示Redis可以接受任意ip的连接<br># bind 127.0.0.1 <br><br># 关闭保护模式<br>protected-mode no <br><br># 设定密码(可选，如果这里开启了密码要求，slave的配置里就要加这个密码)<br>requirepass masterpassword <br><br># 设定主库的密码，用于认证，如果主库开启了requirepass选项这里就必须填相应的密码<br>masterauth &lt;master-password&gt;<br><br># 设定master的IP和端口号，redis配置文件中的默认端口号是6379<br># 低版本的redis这里会是slaveof，意思是一样的，因为slave是比较敏感的词汇，所以在redis后面的版本中不在使用slave的概念，取而代之的是replica<br># 将35.236.172.131做为主，其余两台机器做从。ip和端口号按照机器和配置做相应修改。<br>replicaof 35.236.172.131 6379<br><br># 配置日志路径，为了便于排查问题，指定redis的日志文件目录<br>logfile &quot;/var/log/redis/redis.log&quot;<br></code></pre></td></tr></table></figure>
+<h3 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h3><p>分别在主机和从机上按照上面的方法建立好配置文件，检查无误后就可以开始启动容器了。<br>我们在三台机器上分别将容器别名指定为redis, redis-slave，这样便于区分与说明，docker通过–name参数来指定容器的别名。redis是master上容器的别名，redis-slave是slave上的别名。<br>只是要注意master的配置文件和slave不同。不过首先要启动主服务器，也就是redis容器。然后再启动redis-slave。<br>在此处为了区分主从两个容器，分别给主服务器6379端口和从服务器6380端口<br>启动主服务器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -d -p 6379:6379 --name redis -v /hzero/repo/redis/redis-master.conf:/usr/local/redis.conf redis redis-server /usr/local/redis.conf<br></code></pre></td></tr></table></figure>
+<p>然后启动从服务器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -d -p 6380:6379 --name redis-slave -v /hzero/repo/redis/redis-slave.conf:/usr/local/redis.conf redis redis-server /usr/local/redis.conf<br></code></pre></td></tr></table></figure>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041567622316.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="测试（验证主从复制）"><a href="#测试（验证主从复制）" class="headerlink" title="测试（验证主从复制）"></a>测试（验证主从复制）</h3><p>使用以下命令进入redis的容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">exec</span> -it redis bash<br></code></pre></td></tr></table></figure>
+<p>使用redis-cli进入容器，查看现有的key，可以看到为空<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/01/17041135641014.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>在此服务器环境设置一个新key并查看：<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/01/17041135822950.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>此时只在主服务器上设置了key，在从服务器应该自动复制过去一份，我们使用以下命令进入从服务器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">exec</span> -it redis-slave bash<br></code></pre></td></tr></table></figure>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/01/17041136048755.jpg" srcset="/img/loading.gif" lazyload><br>可以看到从服务器已经复制了主服务器上的key<br>至此，主从集群模式的redis已经搭建成功。</p>
+<h1 id="Redis哨兵模式的集群"><a href="#Redis哨兵模式的集群" class="headerlink" title="Redis哨兵模式的集群"></a>Redis哨兵模式的集群</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><h3 id="前言-1"><a href="#前言-1" class="headerlink" title="前言"></a>前言</h3><p>之前介绍了用docker来搭建redis主从环境，但这只是对数据添加了从库备份(主从复制)，当主库down掉的时候，从库是不会自动升级为主库的，也就是说，该redis主从集群并非是高可用的。<br>但是如果主发生故障，需要人工手动切换从机为主机。这种切换工作不仅浪费人力资源，更大的影响是主从切换期间这段时间redis是无法对外提供服务的。因此，哨兵系统被开发出来了，哨兵可以在主发生故障后，自动进行故障转移，从从机里选出一台升级为主机，并持续监听着原来的主机，当原来的主机恢复后，会将其作为新主的从机。</p>
+<h3 id="集群架构"><a href="#集群架构" class="headerlink" title="集群架构"></a>集群架构</h3><p>目前来说，高可用(主从复制、主从切换)redis集群有两种方案，一种是redis-sentinel，只有一个master，各实例数据保持一致；一种是redis-cluster，也叫分布式redis集群，可以有多个master，数据分片分布在这些master上。<br>  本文介绍基于docker和redis-sentinel的高可用redis集群搭建，大多数情况下，redis-sentinel也需要做高可用，这里先对redis搭建一主二从环境，另外需要3个redis-sentinel监控redis master。<br>很显然，只使用单个redis-sentinel进程来监控redis集群是不可靠的，由于redis-sentinel本身也有single-point-of-failure-problem(单点问题)，当出现问题时整个redis集群系统将无法按照预期的方式切换主从。官方推荐：一个健康的集群部署，至少需要3个Sentinel实例。另外，redis-sentinel只需要配置监控redis master，而集群之间可以通过master相互通信。<br>实际可靠的redis集群拓扑图如下：<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041568039151.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="redis-sentinel"><a href="#redis-sentinel" class="headerlink" title="redis-sentinel"></a>redis-sentinel</h3><p>redis-sentinel作为独立的服务，用于管理多个redis实例，该系统主要执行以下三个任务：</p>
+<ul>
+<li>监控 (Monitor): 检查redis主、从实例是否正常运作</li>
+<li>通知 (Notification): 监控的redis服务出现问题时，可通过API发送通知告警</li>
+<li>自动故障迁移 (Automatic Failover): 当检测到redis主库不能正常工作时，redis-sentinel会开始做自动故障判断、迁移等操作，先是移除失效redis主服务，然后将其中一个从服务器升级为新的主服务器，并让失效主服务器的其他从服务器改为复制新的主服务器。当客户端试图连接失效的主服务器时，集群也会向客户端返回最新主服务器的地址，使得集群可以使用新的主服务器来代替失效服务器</li>
+</ul>
+<h2 id="添加哨兵模式"><a href="#添加哨兵模式" class="headerlink" title="添加哨兵模式"></a>添加哨兵模式</h2><h3 id="搭建三节点redis主从集群"><a href="#搭建三节点redis主从集群" class="headerlink" title="搭建三节点redis主从集群"></a>搭建三节点redis主从集群</h3><p>在上面的基础上新建一个从服务器，分别将两个从服务器的name设置为redis-slave-1和redis-slave-2，其中redis-slave-2端口设置为6381，并且此时为了方便外围系统通过sentinel调用redis集群并且方便sentinel通过端口区分redis集群的机器，需要更改启动命令为如下：<br>启动主服务器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -d --net host --name redis -v /hzero/repo/redis/redis-master.conf:/usr/local/redis.conf redis redis-server /usr/local/redis.conf<br></code></pre></td></tr></table></figure>
+<p>启动从服务器1</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -d --net host --name redis-slave-1 -v /hzero/repo/redis/redis-slave-1.conf:/usr/local/redis.conf redis redis-server /usr/local/redis.conf<br></code></pre></td></tr></table></figure>
+<p>启动从服务器2</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -d --net host --name redis-slave-2 -v /hzero/repo/redis/redis-slave-2.conf:/usr/local/redis.conf redis redis-server /usr/local/redis.conf<br></code></pre></td></tr></table></figure>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041568499158.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>进入主服务器可以看到：<br>主服务器正确识别到两个slave：<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/01/17041137001865.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>两个slave也正确的挂载到了master上：<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/01/17041137220816.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="获取并修改sentinel配置"><a href="#获取并修改sentinel配置" class="headerlink" title="获取并修改sentinel配置"></a>获取并修改sentinel配置</h3><p>通过wget命令获取sentinel的配置文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget http://download.redis.io/redis-stable/sentinel.conf<br></code></pre></td></tr></table></figure>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041568851681.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>修改配置文件以下几项</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs conf"><br># 修改日志文件的路径<br>logfile &quot;/var/log/redis/sentinel.log&quot;<br><br># 修改监控的主redis服务器<br># 最后一个2表示，两台机器判定主被动下线后，就进行failover(故障转移)<br>sentinel monitor mymaster 35.236.172.131 6379 2<br></code></pre></td></tr></table></figure>
+<h3 id="启动容器并查看日志状态"><a href="#启动容器并查看日志状态" class="headerlink" title="启动容器并查看日志状态"></a>启动容器并查看日志状态</h3><p>通过以下命令启动容器：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -it --name sentinel --net host -v /hzero/repo/redis/sentinel.conf:/usr/local/etc/redis/sentinel.conf -d redis redis-sentinel /usr/local/etc/redis/sentinel.conf<br></code></pre></td></tr></table></figure>
+<p>其中&#x2F;hzero&#x2F;repo&#x2F;redis&#x2F;sentinel.conf为下载并修改的配置文件的位置，&#x2F;usr&#x2F;local&#x2F;etc&#x2F;redis&#x2F;sentinel.conf是docker容器中配置文件的位置，redis-sentinel &#x2F;usr&#x2F;local&#x2F;etc&#x2F;redis&#x2F;sentinel.conf表示在容器启动时使用配置文件启动哨兵<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041569201068.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>通过日志可以查看到，两个slave通过设置的master的监控正确的被sentinel识别到。</p>
+<h3 id="测试sentinel"><a href="#测试sentinel" class="headerlink" title="测试sentinel"></a>测试sentinel</h3><p>重新开一个shell并且停掉master：<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041569592079.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>通过sentinel的日志可以看到哨兵判断6379端口的master下线，并且开始投票选举新的master，选举完毕后将主服务器切换到了新的master上，然后将其他的还在线的从服务器挂载到新的master上面去。</p>
+<p>此时登陆新的master查看集群信息：<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/01/17041137983846.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>可以看到原本的slave-2角色已经由slave转换为master，原本的slave-1也已经挂载到了新的master上：<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/01/17041138164977.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>此时重启原来的master，它并不会重新作为master运行，在哨兵的控制下他会以slave的角色挂载到新的master上。<br>查看sentinel日志可以看到：<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/02/17041570142774.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>再进入新的主服务器可以查看原来的master已经作为slave角色挂载：<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/01/17041138554218.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>进入原来的主服务器也可以查看角色已经切换为了slave<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/01/01/17041138708495.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>至此，哨兵模式下的redis集群已经搭建完毕！</p>
+<h1 id="springboot整合redis哨兵模式"><a href="#springboot整合redis哨兵模式" class="headerlink" title="springboot整合redis哨兵模式"></a>springboot整合redis哨兵模式</h1><h2 id="普通springboot项目整合哨兵"><a href="#普通springboot项目整合哨兵" class="headerlink" title="普通springboot项目整合哨兵"></a>普通springboot项目整合哨兵</h2><h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>pom.xml 添加Redis依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-comment">&lt;!-- redis --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-data-redis<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<p>application.yml 添加Redis配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs yml"><span class="hljs-attr">redis:</span><br>  <span class="hljs-comment">##哨兵</span><br>  <span class="hljs-attr">sentinel:</span><br>    <span class="hljs-attr">master:</span> <span class="hljs-string">mymaster</span><br>    <span class="hljs-attr">nodes:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-number">172.21</span><span class="hljs-number">.0</span><span class="hljs-number">.211</span><span class="hljs-string">:7005</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-number">172.21</span><span class="hljs-number">.0</span><span class="hljs-number">.211</span><span class="hljs-string">:7006</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-number">172.21</span><span class="hljs-number">.0</span><span class="hljs-number">.211</span><span class="hljs-string">:7007</span><br>  <span class="hljs-comment">##</span><br>  <span class="hljs-attr">jedis:</span><br>    <span class="hljs-attr">pool:</span><br>      <span class="hljs-comment">### 连接池最大连接数（使用负值表示没有限制） </span><br>      <span class="hljs-attr">max-active:</span> <span class="hljs-number">9</span><br>      <span class="hljs-comment">### 连接池最大阻塞等待时间（使用负值表示没有限制）</span><br>      <span class="hljs-attr">max-wait:</span> <span class="hljs-number">-1</span><br>      <span class="hljs-comment">### 连接池中的最大空闲连接 </span><br>      <span class="hljs-attr">max-idle:</span> <span class="hljs-number">9</span><br>      <span class="hljs-comment">### 连接池中的最小空闲连接 </span><br>      <span class="hljs-attr">min-idle:</span> <span class="hljs-number">0</span><br>  <span class="hljs-comment">### Redis数据库索引(默认为0) </span><br>  <span class="hljs-attr">database:</span> <span class="hljs-number">0</span><br>  <span class="hljs-comment">### 连接超时时间（毫秒） </span><br>  <span class="hljs-attr">timeout:</span> <span class="hljs-number">60000</span><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Redis/" class="category-chain-item">Redis</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%8E%9F%E5%88%9B/" class="print-no-link">#原创</a>
+      
+        <a href="/tags/Redis/" class="print-no-link">#Redis</a>
+      
+        <a href="/tags/Redis-sentinel/" class="print-no-link">#Redis sentinel</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>redis集群的搭建和使用</div>
+      <div>https://blog.firstmetcs.net/2024/01/01/redis集群的搭建和使用/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>firstmetcs</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年1月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/01/26/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BA%E5%AE%B6%E5%BA%AD%E8%BD%AF%E8%B7%AF%E7%94%B1%E7%B3%BB%E7%BB%9F/" title="从零开始搭建家庭软路由系统（安装OpenWrt，并做为旁路由接入家庭网络）">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">从零开始搭建家庭软路由系统（安装OpenWrt，并做为旁路由接入家庭网络）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/01/%E7%AB%99%E7%82%B9%E5%85%AC%E5%91%8A/" title="【置顶】站点公告">
+                        <span class="hidden-mobile">【置顶】站点公告</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'firstmetcs/blog-comments');
+      s.setAttribute('issue-term', 'pathname');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <div style="font-size: 0.85rem">© 2015-2023 <a href="https://firstmetcs.net" target="_blank">firstmetcs.net</a> 版权所有</div>
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      京ICP备2023003449号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502051927"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>京公网安备11010502051927号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
