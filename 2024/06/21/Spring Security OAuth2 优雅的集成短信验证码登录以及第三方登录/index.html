@@ -1,0 +1,826 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/f.png">
+  <link rel="icon" href="/img/f.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="firstmetcs">
+  <meta name="keywords" content="Fsmt blog,共同进步 Fsmt,Fsmt,fsmt,firstmetcs">
+  
+    <meta name="description" content="基于不侵入Spring Security OAuth2的原有代码、对于不同的登录方式不扩展新的端点、可以对所有登录方式进行兼容，介绍如何开发一套集成登录认证组件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Security OAuth2 优雅的集成短信验证码登录以及第三方登录">
+<meta property="og:url" content="https://blog.firstmetcs.net/2024/06/21/Spring%20Security%20OAuth2%20%E4%BC%98%E9%9B%85%E7%9A%84%E9%9B%86%E6%88%90%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E4%BB%A5%E5%8F%8A%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/index.html">
+<meta property="og:site_name" content="Fsmt blog">
+<meta property="og:description" content="基于不侵入Spring Security OAuth2的原有代码、对于不同的登录方式不扩展新的端点、可以对所有登录方式进行兼容，介绍如何开发一套集成登录认证组件。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fsmt-blog.oss-cn-beijing.aliyuncs.com/cover/spring-security-oauth.png">
+<meta property="article:published_time" content="2024-06-21T07:30:00.000Z">
+<meta property="article:modified_time" content="2024-06-21T07:30:00.000Z">
+<meta property="article:author" content="firstmetcs">
+<meta property="article:tag" content="Spring Security OAuth2">
+<meta property="article:tag" content="短信登录">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fsmt-blog.oss-cn-beijing.aliyuncs.com/cover/spring-security-oauth.png">
+  
+  
+  
+     <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+  
+  <title>Spring Security OAuth2 优雅的集成短信验证码登录以及第三方登录 - Fsmt blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.firstmetcs.net","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"cedb334c71d9c14c4f0337d5e60aa43c","google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+    <!-- Baidu Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?cedb334c71d9c14c4f0337d5e60aa43c";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+      }
+    </script>
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Fsmt blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fsmt blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://fsmt-blog.oss-cn-beijing.aliyuncs.com/cover/spring-security-oauth.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Spring Security OAuth2 优雅的集成短信验证码登录以及第三方登录"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-06-21 15:30" pubdate>
+          2024年6月21日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Spring Security OAuth2 优雅的集成短信验证码登录以及第三方登录</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-info">
+            <p>本文由 Fluid 用户授权转载，版权归原作者所有。</p><p>本文作者：李球<br>原文地址：<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000014371789">https://segmentfault.com/a/1190000014371789</a></p>
+          </div>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>基于SpringCloud做微服务架构分布式系统时，OAuth2.0作为认证的业内标准，Spring Security OAuth2也提供了全套的解决方案来支持在Spring Cloud&#x2F;Spring Boot环境下使用OAuth2.0，提供了开箱即用的组件。但是在开发过程中我们会发现由于Spring Security OAuth2的组件特别全面，这样就导致了扩展很不方便或者说是不太容易直指定扩展的方案，例如：</p>
+<ol>
+<li>图片验证码登录</li>
+<li>短信验证码登录</li>
+<li>微信小程序登录</li>
+<li>第三方系统登录</li>
+<li>CAS单点登录</li>
+</ol>
+<p>在面对这些场景的时候，预计很多对Spring Security OAuth2不熟悉的人恐怕会无从下手。基于上述的场景要求，如何优雅的集成短信验证码登录及第三方登录，怎么样才算是优雅集成呢？有以下要求：</p>
+<ol>
+<li>不侵入Spring Security OAuth2的原有代码</li>
+<li>对于不同的登录方式不扩展新的端点，使用&#x2F;oauth&#x2F;token可以适配所有的登录方式</li>
+<li>可以对所有登录方式进行兼容，抽象一套模型只要简单的开发就可以集成登录</li>
+</ol>
+<p>基于上述的设计要求，接下来将会在文章种详细介绍如何开发一套集成登录认证组件开满足上述要求。</p>
+<blockquote>
+<p>阅读本篇文章您需要了解OAuth2.0认证体系、SpringBoot、SpringSecurity以及Spring Cloud等相关知识</p>
+</blockquote>
+<h1 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h1><p>我们来看下Spring Security OAuth2的认证流程：<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/06/21/394837415ad07588c1f78.webp" srcset="/img/loading.gif" lazyload alt="39483741-5ad07588c1f78"></p>
+<p>这个流程当中，切入点不多，集成登录的思路如下：</p>
+<ol>
+<li>在进入流程之前先进行拦截，设置集成认证的类型，例如：短信验证码、图片验证码等信息。</li>
+<li>在拦截的通知进行预处理，预处理的场景有很多，比如验证短信验证码是否匹配、图片验证码是否匹配、是否是登录IP白名单等处理</li>
+<li>在UserDetailService.loadUserByUsername方法中，根据之前设置的集成认证类型去获取用户信息，例如：通过手机号码获取用户、通过微信小程序OPENID获取用户等等</li>
+</ol>
+<p>接入这个流程之后，基本上就可以优雅集成第三方登录。</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>介绍完思路之后，下面通过代码来展示如何实现：</p>
+<h2 id="第一步，定义拦截器拦截登录的请求"><a href="#第一步，定义拦截器拦截登录的请求" class="headerlink" title="第一步，定义拦截器拦截登录的请求"></a>第一步，定义拦截器拦截登录的请求</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> LIQIU</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2018-3-30</span><br><span class="hljs-comment"> **/</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">IntegrationAuthenticationFilter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">GenericFilterBean</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">ApplicationContextAware</span> &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">AUTH_TYPE_PARM_NAME</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;auth_type&quot;</span>;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">OAUTH_TOKEN_URL</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;/oauth/token&quot;</span>;<br><br>    <span class="hljs-keyword">private</span> Collection&lt;IntegrationAuthenticator&gt; authenticators;<br><br>    <span class="hljs-keyword">private</span> ApplicationContext applicationContext;<br><br>    <span class="hljs-keyword">private</span> RequestMatcher requestMatcher;<br><br>    <span class="hljs-type">public</span> <span class="hljs-title function_">IntegrationAuthenticationFilter</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-built_in">this</span>.requestMatcher = <span class="hljs-keyword">new</span> <span class="hljs-title class_">OrRequestMatcher</span>(<br>                <span class="hljs-keyword">new</span> <span class="hljs-title class_">AntPathRequestMatcher</span>(OAUTH_TOKEN_URL, <span class="hljs-string">&quot;GET&quot;</span>),<br>                <span class="hljs-keyword">new</span> <span class="hljs-title class_">AntPathRequestMatcher</span>(OAUTH_TOKEN_URL, <span class="hljs-string">&quot;POST&quot;</span>)<br>        );<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">doFilter</span><span class="hljs-params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="hljs-keyword">throws</span> IOException, ServletException &#123;<br><br>        <span class="hljs-type">HttpServletRequest</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> (HttpServletRequest) servletRequest;<br>        <span class="hljs-type">HttpServletResponse</span> <span class="hljs-variable">response</span> <span class="hljs-operator">=</span> (HttpServletResponse) servletResponse;<br><br>        <span class="hljs-keyword">if</span>(requestMatcher.matches(request))&#123;<br>            <span class="hljs-comment">//设置集成登录信息</span><br>            <span class="hljs-type">IntegrationAuthentication</span> <span class="hljs-variable">integrationAuthentication</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IntegrationAuthentication</span>();<br>            integrationAuthentication.setAuthType(request.getParameter(AUTH_TYPE_PARM_NAME));<br>            integrationAuthentication.setAuthParameters(request.getParameterMap());<br>            IntegrationAuthenticationContext.set(integrationAuthentication);<br>            <span class="hljs-keyword">try</span>&#123;<br>                <span class="hljs-comment">//预处理</span><br>                <span class="hljs-built_in">this</span>.prepare(integrationAuthentication);<br><br>                filterChain.doFilter(request,response);<br><br>                <span class="hljs-comment">//后置处理</span><br>                <span class="hljs-built_in">this</span>.complete(integrationAuthentication);<br>            &#125;<span class="hljs-keyword">finally</span> &#123;<br>                IntegrationAuthenticationContext.clear();<br>            &#125;<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            filterChain.doFilter(request,response);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 进行预处理</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> integrationAuthentication</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">void</span> <span class="hljs-title function_">prepare</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span> &#123;<br><br>        <span class="hljs-comment">//延迟加载认证器</span><br>        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.authenticators == <span class="hljs-literal">null</span>)&#123;<br>            <span class="hljs-keyword">synchronized</span> (<span class="hljs-built_in">this</span>)&#123;<br>                <span class="hljs-type">Map</span>&lt;String,IntegrationAuthenticator&gt; <span class="hljs-variable">integrationAuthenticatorMap</span> <span class="hljs-operator">=</span> applicationContext.getBeansOfType(IntegrationAuthenticator.class);<br>                <span class="hljs-keyword">if</span>(integrationAuthenticatorMap != <span class="hljs-literal">null</span>)&#123;<br>                    <span class="hljs-built_in">this</span>.authenticators = integrationAuthenticatorMap.values();<br>                &#125;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-keyword">if</span>(<span class="hljs-built_in">this</span>.authenticators == <span class="hljs-literal">null</span>)&#123;<br>            <span class="hljs-built_in">this</span>.authenticators = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>        &#125;<br><br>        <span class="hljs-keyword">for</span> (IntegrationAuthenticator authenticator: authenticators) &#123;<br>            <span class="hljs-keyword">if</span>(authenticator.support(integrationAuthentication))&#123;<br>                authenticator.prepare(integrationAuthentication);<br>            &#125;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 后置处理</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> integrationAuthentication</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">void</span> <span class="hljs-title function_">complete</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span>&#123;<br>        <span class="hljs-keyword">for</span> (IntegrationAuthenticator authenticator: authenticators) &#123;<br>            <span class="hljs-keyword">if</span>(authenticator.support(integrationAuthentication))&#123;<br>                authenticator.complete(integrationAuthentication);<br>            &#125;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">setApplicationContext</span><span class="hljs-params">(ApplicationContext applicationContext)</span> <span class="hljs-keyword">throws</span> BeansException &#123;<br>        <span class="hljs-built_in">this</span>.applicationContext = applicationContext;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在这个类种主要完成2部分工作：1、根据参数获取当前的是认证类型，2、根据不同的认证类型调用不同的IntegrationAuthenticator.prepar进行预处理</p>
+<h2 id="第二步，将拦截器放入到拦截链条中"><a href="#第二步，将拦截器放入到拦截链条中" class="headerlink" title="第二步，将拦截器放入到拦截链条中"></a>第二步，将拦截器放入到拦截链条中</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> LIQIU</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2018-3-7</span><br><span class="hljs-comment"> **/</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-meta">@EnableAuthorizationServer</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthorizationServerConfiguration</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AuthorizationServerConfigurerAdapter</span> &#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> RedisConnectionFactory redisConnectionFactory;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> AuthenticationManager authenticationManager;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> IntegrationUserDetailsService integrationUserDetailsService;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> WebResponseExceptionTranslator webResponseExceptionTranslator;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> IntegrationAuthenticationFilter integrationAuthenticationFilter;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> DatabaseCachableClientDetailsService redisClientDetailsService;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">configure</span><span class="hljs-params">(ClientDetailsServiceConfigurer clients)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        <span class="hljs-comment">// TODO persist clients details</span><br>        clients.withClientDetails(redisClientDetailsService);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">configure</span><span class="hljs-params">(AuthorizationServerEndpointsConfigurer endpoints)</span> &#123;<br>        endpoints<br>                .tokenStore(<span class="hljs-keyword">new</span> <span class="hljs-title class_">RedisTokenStore</span>(redisConnectionFactory))<br><span class="hljs-comment">//                .accessTokenConverter(jwtAccessTokenConverter())</span><br>                .authenticationManager(authenticationManager)<br>                .exceptionTranslator(webResponseExceptionTranslator)<br>                .reuseRefreshTokens(<span class="hljs-literal">false</span>)<br>                .userDetailsService(integrationUserDetailsService);<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">configure</span><span class="hljs-params">(AuthorizationServerSecurityConfigurer security)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        security.allowFormAuthenticationForClients()<br>                .tokenKeyAccess(<span class="hljs-string">&quot;isAuthenticated()&quot;</span>)<br>                .checkTokenAccess(<span class="hljs-string">&quot;permitAll()&quot;</span>)<br>                .addTokenEndpointAuthenticationFilter(integrationAuthenticationFilter);<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">PasswordEncoder</span> <span class="hljs-title function_">passwordEncoder</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BCryptPasswordEncoder</span>();<br>    &#125;<br><br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">JwtAccessTokenConverter</span> <span class="hljs-title function_">jwtAccessTokenConverter</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">JwtAccessTokenConverter</span> <span class="hljs-variable">jwtAccessTokenConverter</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JwtAccessTokenConverter</span>();<br>        jwtAccessTokenConverter.setSigningKey(<span class="hljs-string">&quot;cola-cloud&quot;</span>);<br>        <span class="hljs-keyword">return</span> jwtAccessTokenConverter;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>通过调用security. .addTokenEndpointAuthenticationFilter(integrationAuthenticationFilter);方法，将拦截器放入到认证链条中。</p>
+<h2 id="第三步，根据认证类型来处理用户信息"><a href="#第三步，根据认证类型来处理用户信息" class="headerlink" title="第三步，根据认证类型来处理用户信息"></a>第三步，根据认证类型来处理用户信息</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Service</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">IntegrationUserDetailsService</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">UserDetailsService</span> &#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> UpmClient upmClient;<br><br>    <span class="hljs-keyword">private</span> List&lt;IntegrationAuthenticator&gt; authenticators;<br><br>    <span class="hljs-meta">@Autowired(required = false)</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">setIntegrationAuthenticators</span><span class="hljs-params">(List&lt;IntegrationAuthenticator&gt; authenticators)</span> &#123;<br>        <span class="hljs-built_in">this</span>.authenticators = authenticators;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">User</span> <span class="hljs-title function_">loadUserByUsername</span><span class="hljs-params">(String username)</span> <span class="hljs-keyword">throws</span> UsernameNotFoundException &#123;<br>        <span class="hljs-type">IntegrationAuthentication</span> <span class="hljs-variable">integrationAuthentication</span> <span class="hljs-operator">=</span> IntegrationAuthenticationContext.get();<br>        <span class="hljs-comment">//判断是否是集成登录</span><br>        <span class="hljs-keyword">if</span> (integrationAuthentication == <span class="hljs-literal">null</span>) &#123;<br>            integrationAuthentication = <span class="hljs-keyword">new</span> <span class="hljs-title class_">IntegrationAuthentication</span>();<br>        &#125;<br>        integrationAuthentication.setUsername(username);<br>        <span class="hljs-type">UserVO</span> <span class="hljs-variable">userVO</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.authenticate(integrationAuthentication);<br><br>        <span class="hljs-keyword">if</span>(userVO == <span class="hljs-literal">null</span>)&#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UsernameNotFoundException</span>(<span class="hljs-string">&quot;用户名或密码错误&quot;</span>);<br>        &#125;<br><br>        <span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>();<br>        BeanUtils.copyProperties(userVO, user);<br>        <span class="hljs-built_in">this</span>.setAuthorize(user);<br>        <span class="hljs-keyword">return</span> user;<br><br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 设置授权信息</span><br><span class="hljs-comment">     *</span><br><span class="hljs-comment">     * <span class="hljs-doctag">@param</span> user</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">setAuthorize</span><span class="hljs-params">(User user)</span> &#123;<br>        <span class="hljs-type">Authorize</span> <span class="hljs-variable">authorize</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.upmClient.getAuthorize(user.getId());<br>        user.setRoles(authorize.getRoles());<br>        user.setResources(authorize.getResources());<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">UserVO</span> <span class="hljs-title function_">authenticate</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span> &#123;<br>        <span class="hljs-keyword">if</span> (<span class="hljs-built_in">this</span>.authenticators != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">for</span> (IntegrationAuthenticator authenticator : authenticators) &#123;<br>                <span class="hljs-keyword">if</span> (authenticator.support(integrationAuthentication)) &#123;<br>                    <span class="hljs-keyword">return</span> authenticator.authenticate(integrationAuthentication);<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里实现了一个IntegrationUserDetailsService ，在loadUserByUsername方法中会调用authenticate方法，在authenticate方法中会当前上下文种的认证类型调用不同的IntegrationAuthenticator 来获取用户信息，接下来来看下默认的用户名密码是如何处理的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-meta">@Primary</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UsernamePasswordAuthenticator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractPreparableIntegrationAuthenticator</span> &#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> UcClient ucClient;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">UserVO</span> <span class="hljs-title function_">authenticate</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span> &#123;<br>        <span class="hljs-keyword">return</span> ucClient.findUserByUsername(integrationAuthentication.getUsername());<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">prepare</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span> &#123;<br><br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">support</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span> &#123;<br>        <span class="hljs-keyword">return</span> StringUtils.isEmpty(integrationAuthentication.getAuthType());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>UsernamePasswordAuthenticator只会处理没有指定的认证类型即是默认的认证类型，这个类中主要是通过用户名获取密码。接下来来看下图片验证码登录如何处理的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 集成验证码认证</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> LIQIU</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2018-3-31</span><br><span class="hljs-comment"> **/</span><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">VerificationCodeIntegrationAuthenticator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">UsernamePasswordAuthenticator</span> &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-variable">VERIFICATION_CODE_AUTH_TYPE</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;vc&quot;</span>;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> VccClient vccClient;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">prepare</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span> &#123;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">vcToken</span> <span class="hljs-operator">=</span> integrationAuthentication.getAuthParameter(<span class="hljs-string">&quot;vc_token&quot;</span>);<br>        <span class="hljs-type">String</span> <span class="hljs-variable">vcCode</span> <span class="hljs-operator">=</span> integrationAuthentication.getAuthParameter(<span class="hljs-string">&quot;vc_code&quot;</span>);<br>        <span class="hljs-comment">//验证验证码</span><br>        <span class="hljs-type">Result</span>&lt;Boolean&gt; <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> vccClient.validate(vcToken, vcCode, <span class="hljs-literal">null</span>);<br>        <span class="hljs-keyword">if</span> (!result.getData()) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OAuth2Exception</span>(<span class="hljs-string">&quot;验证码错误&quot;</span>);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">support</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span> &#123;<br>        <span class="hljs-keyword">return</span> VERIFICATION_CODE_AUTH_TYPE.equals(integrationAuthentication.getAuthType());<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>VerificationCodeIntegrationAuthenticator继承UsernamePasswordAuthenticator，因为其只是需要在prepare方法中验证验证码是否正确，获取用户还是用过用户名密码的方式获取。但是需要认证类型为”vc”才会处理<br>接下来来看下短信验证码登录是如何处理的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SmsIntegrationAuthenticator</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractPreparableIntegrationAuthenticator</span> <span class="hljs-keyword">implements</span>  <span class="hljs-title class_">ApplicationEventPublisherAware</span> &#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> UcClient ucClient;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> VccClient vccClient;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> PasswordEncoder passwordEncoder;<br><br>    <span class="hljs-keyword">private</span> ApplicationEventPublisher applicationEventPublisher;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-variable">SMS_AUTH_TYPE</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;sms&quot;</span>;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">UserVO</span> <span class="hljs-title function_">authenticate</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span> &#123;<br><br>        <span class="hljs-comment">//获取密码，实际值是验证码</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">password</span> <span class="hljs-operator">=</span> integrationAuthentication.getAuthParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>        <span class="hljs-comment">//获取用户名，实际值是手机号</span><br>        <span class="hljs-type">String</span> <span class="hljs-variable">username</span> <span class="hljs-operator">=</span> integrationAuthentication.getUsername();<br>        <span class="hljs-comment">//发布事件，可以监听事件进行自动注册用户</span><br>        <span class="hljs-built_in">this</span>.applicationEventPublisher.publishEvent(<span class="hljs-keyword">new</span> <span class="hljs-title class_">SmsAuthenticateBeforeEvent</span>(integrationAuthentication));<br>        <span class="hljs-comment">//通过手机号码查询用户</span><br>        <span class="hljs-type">UserVO</span> <span class="hljs-variable">userVo</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">this</span>.ucClient.findUserByPhoneNumber(username);<br>        <span class="hljs-keyword">if</span> (userVo != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-comment">//将密码设置为验证码</span><br>            userVo.setPassword(passwordEncoder.encode(password));<br>            <span class="hljs-comment">//发布事件，可以监听事件进行消息通知</span><br>            <span class="hljs-built_in">this</span>.applicationEventPublisher.publishEvent(<span class="hljs-keyword">new</span> <span class="hljs-title class_">SmsAuthenticateSuccessEvent</span>(integrationAuthentication));<br>        &#125;<br>        <span class="hljs-keyword">return</span> userVo;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">prepare</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span> &#123;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">smsToken</span> <span class="hljs-operator">=</span> integrationAuthentication.getAuthParameter(<span class="hljs-string">&quot;sms_token&quot;</span>);<br>        <span class="hljs-type">String</span> <span class="hljs-variable">smsCode</span> <span class="hljs-operator">=</span> integrationAuthentication.getAuthParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>        <span class="hljs-type">String</span> <span class="hljs-variable">username</span> <span class="hljs-operator">=</span> integrationAuthentication.getAuthParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>        <span class="hljs-type">Result</span>&lt;Boolean&gt; <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> vccClient.validate(smsToken, smsCode, username);<br>        <span class="hljs-keyword">if</span> (!result.getData()) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OAuth2Exception</span>(<span class="hljs-string">&quot;验证码错误或已过期&quot;</span>);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">support</span><span class="hljs-params">(IntegrationAuthentication integrationAuthentication)</span> &#123;<br>        <span class="hljs-keyword">return</span> SMS_AUTH_TYPE.equals(integrationAuthentication.getAuthType());<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">void</span> <span class="hljs-title function_">setApplicationEventPublisher</span><span class="hljs-params">(ApplicationEventPublisher applicationEventPublisher)</span> &#123;<br>        <span class="hljs-built_in">this</span>.applicationEventPublisher = applicationEventPublisher;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>SmsIntegrationAuthenticator会对登录的短信验证码进行预处理，判断其是否非法，如果是非法的则直接中断登录。如果通过预处理则在获取用户信息的时候通过手机号去获取用户信息，并将密码重置，以通过后续的密码校验。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在这个解决方案中，主要是使用责任链和适配器的设计模式来解决集成登录的问题，提高了可扩展性，并对spring的源码无污染。如果还要继承其他的登录，只需要实现自定义的IntegrationAuthenticator就可以。</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://gitee.com/leecho/cola-cloud">https://gitee.com/leecho/cola-cloud</a><br>大家有好的建议和想法可以一起沟通交流。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Spring-Security-OAuth2/" class="category-chain-item">Spring Security OAuth2</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Spring-Security-OAuth2/" class="print-no-link">#Spring Security OAuth2</a>
+      
+        <a href="/tags/%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95/" class="print-no-link">#短信登录</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Spring Security OAuth2 优雅的集成短信验证码登录以及第三方登录</div>
+      <div>https://blog.firstmetcs.net/2024/06/21/Spring Security OAuth2 优雅的集成短信验证码登录以及第三方登录/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>firstmetcs</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年6月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/09/10/Nginx%E5%8E%BB%E6%8E%89%E5%89%8D%E7%AB%AF%E9%85%8D%E7%BD%AE%E7%9A%84%E8%B7%AF%E5%BE%84%E5%89%8D%E7%BC%80/" title="Nginx去掉前端配置的路径前缀">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Nginx去掉前端配置的路径前缀</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/05/23/%E5%9B%BD%E8%A1%8C%20Sony%20A80J%E7%94%B5%E8%A7%86%E6%9B%B4%E6%8D%A2%E7%BE%8E%E5%8C%BA%E4%B8%BB%E6%9D%BF%E6%9C%80%E8%AF%A6%E6%95%99%E7%A8%8B/" title="不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程">
+                        <span class="hidden-mobile">不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'firstmetcs/blog-comments');
+      s.setAttribute('issue-term', 'pathname');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <div style="font-size: 0.85rem">© 2015-<span id="year">2023</span> <a href="https://firstmetcs.net" target="_blank">firstmetcs.net</a> 版权所有</div><script type="text/javascript">function initCopyrightYear() {document.getElementById("year").innerHTML = new Date().getFullYear();}initCopyrightYear();</script>
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      京ICP备2023003449号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502051927"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>京公网安备11010502051927号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

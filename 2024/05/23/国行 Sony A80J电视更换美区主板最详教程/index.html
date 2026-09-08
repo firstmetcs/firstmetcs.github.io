@@ -1,0 +1,864 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/f.png">
+  <link rel="icon" href="/img/f.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="firstmetcs">
+  <meta name="keywords" content="Fsmt blog,共同进步 Fsmt,Fsmt,fsmt,firstmetcs">
+  
+    <meta name="description" content="不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程">
+<meta property="og:url" content="https://blog.firstmetcs.net/2024/05/23/%E5%9B%BD%E8%A1%8C%20Sony%20A80J%E7%94%B5%E8%A7%86%E6%9B%B4%E6%8D%A2%E7%BE%8E%E5%8C%BA%E4%B8%BB%E6%9D%BF%E6%9C%80%E8%AF%A6%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Fsmt blog">
+<meta property="og:description" content="不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fsmt-blog.oss-cn-beijing.aliyuncs.com/cover/tv-remote-control.jpeg">
+<meta property="article:published_time" content="2024-05-23T05:30:20.000Z">
+<meta property="article:modified_time" content="2024-05-23T05:30:20.000Z">
+<meta property="article:author" content="firstmetcs">
+<meta property="article:tag" content="网络设备">
+<meta property="article:tag" content="智慧家庭">
+<meta property="article:tag" content="Sony电视">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fsmt-blog.oss-cn-beijing.aliyuncs.com/cover/tv-remote-control.jpeg">
+  
+  
+  
+     <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+  
+  <title>不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程 - Fsmt blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.firstmetcs.net","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"cedb334c71d9c14c4f0337d5e60aa43c","google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+    <!-- Baidu Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?cedb334c71d9c14c4f0337d5e60aa43c";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+      }
+    </script>
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Fsmt blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fsmt blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://fsmt-blog.oss-cn-beijing.aliyuncs.com/cover/tv-remote-control.jpeg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-23 13:30" pubdate>
+          2024年5月23日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-info">
+            <p>本文由 Fluid 用户授权转载，版权归原作者所有。</p><p>本文作者：Brick713<br>原文地址：<a target="_blank" rel="noopener" href="https://sspai.com/post/73588">https://sspai.com/post/73588</a></p>
+          </div>
+
+<p>去年双十一的时候家里添置了一台 Sony 电视，完成了一个索粉的信仰充值。在购买之前就了解到国行的 Sony 电视的系统是基于国内用户的特别定制版，在服务和 UI 上都和海外的电视有很大的不同，并且是硬件层面的定制，无法通过刷固件切换区域这种方式来获得完整的体验。作为一个强迫症加完美主义者，在了解到可以通过更换主板的方式获得完整的服务后，于是就有了这次折腾，有了这篇文章。</p>
+<h1 id="前因"><a href="#前因" class="headerlink" title="前因"></a>前因</h1><p>之所以会有更换主板的想法，主要原因如下：</p>
+<ol>
+<li>电视盒子如果没有完整的「杜比全家桶」就浪费了电视的效果，且盒子和电视部分场景下的切换使用，偶尔让人觉得抓狂；</li>
+<li>国行的电视系统缺乏完整的生态。虽然也有诸如当贝市场、沙发管家、Emoton store 这些第三方市场可供使用，但应用内容和智能化远不能满足需求；</li>
+<li>UI 界面太过臃肿。充斥着各种广告、无效信息和强制安装应用的瀑布式界面，对于我这样的信息洁癖来说，实在无法忍受；</li>
+<li>关键性服务的缺失。Chromecast、Homekit、Airplay、GMS 服务的缺失，让电视的功能大打折扣，虽然可以用其他方案替代，效果始终不够理想；</li>
+<li>系统、功能、安全补丁更新缓慢。因为定制的原因，无法同步更新 Google TV 的新功能，缺失了太多本来属于用户的新功能。<br>种种因素的作用下，我开始了更换主板之旅，可能有人会问，为什么不直接买一个电视盒子，比如 Apple TV？我的回答是因为电视自带的 Google TV 系统就可以带来媲美甚至超越电视盒子的体验，为什么还需要外接电视盒子呢？</li>
+</ol>
+<h1 id="更换流程"><a href="#更换流程" class="headerlink" title="更换流程"></a>更换流程</h1><h2 id="购买主板"><a href="#购买主板" class="headerlink" title="购买主板"></a>购买主板</h2><p>首先我们需要购买一块海外电视主板，我们可以在下面几家美国的电子零件供应商的电商平台购买：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.tvpartstoday.com/">tvpartstoday</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.tvpartsguy.com/">tvpartsguy</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.shopjimmy.com/">shopjimmy</a></li>
+</ul>
+<p>我个人最后选择了 <strong>tvpartstoday</strong> 购买主板，这是一家来印第安纳州的电子零件供应商，除了主板之外还包括屏幕、驱动、背板、电源等等。我们可以直接搜索电视型号，购买对应型号的主板，比如我的电视是型号是 <strong>XR-77A80J</strong>。<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164422377201.jpg" srcset="/img/loading.gif" lazyload><br><strong>tvpartstoday</strong> 的购买流程并不复杂，注册账号并补充相关信息即可。付款方式上，<strong>tvpartstoday</strong> 支持 PayPal 和信用卡结算，购买完成后就可以耐心的等待商家将主板寄给我们了。<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164422546599.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="准备工具"><a href="#准备工具" class="headerlink" title="准备工具"></a>准备工具</h2><p>主板到货之后，<strong>tvpartstoday</strong> 还会随硬件附赠一个简易的说明书，我们根据他的提醒需要提前准备一个 U 盘，并提前在 Sony 的官网中下载固件，在更换完主板后对系统进行手动更新。<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164422741641.jpg" srcset="/img/loading.gif" lazyload><br>虽然我在更换主板的时候，成功一次点亮，并且是在配置完电视之后在线更新了系统，并没有手动升级固件，但是为了以防万一，这里还是推荐大家预先下载好自己电视对应的<a target="_blank" rel="noopener" href="https://www.sony.com/electronics/support?cpint=d2c-supportmenu">海外固件</a>。<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164423415486.jpg" srcset="/img/loading.gif" lazyload><br>除此之外，因为海外的主板相比国行主板多出两个音频口，具体的位置根据不同的电视型号位置略有不同。因此我们还需要准备一个电钻进行打孔，孔径大小大概是7MM。为了保证拆卸的顺利，我们也需要提前准备金属卡尺或者拆机片拆卸电视后盖。</p>
+<p>对于动手能力较差或者电视尺寸过大，无法一个人完成拆卸的情况。我建议你和我一样选择直接与本地的 Sony 售后人员联系，让 Sony 的工程师上门帮你进行更换，这样能最大程度的减少潜在风险的发生，最大程度的保护你的电视。当然 Sony 是需要收取一定的人工费用的，费用方面请结合自身情况，参考 Sony 官方的<a target="_blank" rel="noopener" href="https://service.sony.com.cn/content/casch/serviceinfo/partsprice.html">服务费用</a>。<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164423845277.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>总结下来我们需要提前准备好：</p>
+<ol>
+<li>足够容量的 U盘</li>
+<li>对应型号的海外固件</li>
+<li>7MM 钻头的电钻</li>
+<li>拆机片</li>
+<li>与本地 Sony 售后工程师沟通</li>
+</ol>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>这里再补充一些更换过程中需要注意的事项，方便小伙伴们根据自身情况做决策。</p>
+<h3 id="1-保修和售后"><a href="#1-保修和售后" class="headerlink" title="1. 保修和售后"></a>1. 保修和售后</h3><p>编者坐标武汉，Sony 的售后比较健全和方便，上门服务的工程师的专业素质也较高。如果你所在的区域没有类似的售后服务，那么大概率需要自己动手更换主板了。我的主板在付费更换完毕后，Sony 的工程师明确表示并不会影响电视的一年整机保修和三年主要部件保修。工程师只是叮嘱我保留原主板，如果出现问题可以联系他们再次进行维修更换，至于不同地区是否有不同的政策，作者不得而知，但是无论如何，更换下来的主板一定要好好保存。</p>
+<h3 id="2-海外主板的来源"><a href="#2-海外主板的来源" class="headerlink" title="2. 海外主板的来源"></a>2. 海外主板的来源</h3><p>根据结果来看，我们购买的海外主板，大概率不属于 Sony 工厂原件而是拆机件，主板上已经存在电视序列号，因此 Sony 的工程师是无法将你设备原有的序列号录入到海外主板中的。只有「工厂模式下的主板」可以录入电视机身的唯一序列号。但这并不影响主板本身的使用和功能，大家可以不必担心。</p>
+<h3 id="3-有线电视功能可能有影响"><a href="#3-有线电视功能可能有影响" class="headerlink" title="3. 有线电视功能可能有影响"></a>3. 有线电视功能可能有影响</h3><p>因为是海外主板，因此有线电视在传输协议上可能会与国内的有线电视存在一定偏差，如果你有使用有线电视的需求，就需要慎重考虑一下换主板是否有必要了。这里编者没有条件亲自测试过是否有实际影响，但是网络上部分网友反馈可能会出现无法使用的情况，因此还是提醒一下大家风险，但要注意的是运营商的 IPTV 电视服务是不受任何影响的！</p>
+<h3 id="4-部分国行电视功能丧失"><a href="#4-部分国行电视功能丧失" class="headerlink" title="4. 部分国行电视功能丧失"></a>4. 部分国行电视功能丧失</h3><p>更换完主板后，那些专门针对国行电视的功能就会彻底消失了，比如内置的电视应用商城、电视自带优惠活动的兑换、针对国内用户的电视会员优惠、国内流媒体的一些会员优惠等。除此之外，遥控器上的流媒体快捷键也会提示找不到 App，因为腾讯视频在海外系统不是内置安装的。</p>
+<h3 id="5-激活电视的网络需求"><a href="#5-激活电视的网络需求" class="headerlink" title="5. 激活电视的网络需求"></a>5. 激活电视的网络需求</h3><p>更换了主板后，电视的部分功能需要有流畅的网络方可使用，在刚开始激活电视时，因为 NTP 服务器的原因，WIFI 存在实际已连接上，但无网络连接的情况。我们需要进入系统设置里手动修改时间后即可解决。后续通过进入开发者模式，使用 ADB 命令修改 NTP 服务器同步地址来解决。</p>
+<h2 id="更换-激活主板"><a href="#更换-激活主板" class="headerlink" title="更换&amp;激活主板"></a>更换&amp;激活主板</h2><p>如果选择自己动手更换主板，我们需要在断电之后，首先拆卸电视背板，不同电视型号的背板大同小异。机身和背板主要通过卡扣连接，在卸掉固定背板的螺丝之后，再使用拆机片或者金属卡尺慢撬开连接的卡口，这一步要小心一点，避免撬断卡扣。成功打开背板之后，整个机身就展露无疑了</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164425394974.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>卸掉固定主板的螺丝，并小心拆卸掉上面的排线，取下主板即可。这里别忘了对主板的挡板进行打孔，前面提到过，海外的主板多出了两个音频接口。之后就是重新插上排线，并且固定好主板。担心更换难度的小伙伴也可以去 B站和油管上搜索一下拆解更换视频，也许能找到对应的电视型号，跟着视频拆解会更有信心一些。</p>
+<p>更换完毕后，别着急立刻装上背板，先通电开机，看看是否能正常点亮，当我们能看到下面的画面的时候，证明一切顺利，可以放心的还原电视了！</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164425534536.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>开机后的电视设置可以根据你的实际使用情况来选择，既可以选择使用 Google TV 也可以使用 Base TV 模式，相信能完成前面所有工作的小伙伴，后续设置上就不会有太多困难了。唯一要注意的是初次激活 HomeKit 和 AirPlay2 功能时，全过程需要连接海外网络激活，你需要一个可靠代理，否则会一直提示 HomeKit 连接密码错误。</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164425625900.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>当我们的电视正常接入 Homekit 之后，就可以通过 Siri 控制电视的开关，包括使用 iPhone 的虚拟遥控器控制电视。</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164425729453.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>整个过程的最后一步，还需要把校色数据导入到主板中，我们要进入电视的工厂模式，选择显示面板设定（ Panel&#x2F;PQ ）——色彩参数传输（ WB&#x2F;Mura&#x2F;CUC data transfer ）——勾选三个参数——选择 T-con-&gt;SoC 然后执行（ Start ）。这里执行完之后，界面上不会有任何反馈提示，我们直接断电让配置生效即可。断电生效是 Sony 的工程师告知的，具体原因不详，既然工程师这么说了，照做即可。SONY 电视出厂是校色过的，色彩文件一式两份主板驱动版上各一份，可以互相导入导出，只要不是驱动板和主板一起损坏，文件不会丢失，所以至少要保证一个部件没换过才能保留原色彩文件。</p>
+<p>至于如何进入工厂模式（ service mode ），有两种方式：</p>
+<ol>
+<li>首先激活电视的开发者模式，激活方式和所有 Android 设备，在设备信息中连续点击版本号即可，之后进入开发者模式选项，开启 ADB 调试，然后就可以在同一个局域网中使用其他设备连接你的电视了。输入 ADB 命令<code>am start -a com.sony.dtv.intent.action.SELF_DIAG_MODE </code>即可进入工厂模式。</li>
+<li>通过遥控器进入，原厂遥控器是无法进入工厂模式的，需要购买工程遥控器，型号为 TX210C，可以在淘宝上自行购买。使用工程遥控器，在电视关机的情况下，依次按下「5」——「音量减」——「开机」，即可进入工厂模式。</li>
+</ol>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164426138563.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="备份色彩文件"><a href="#备份色彩文件" class="headerlink" title="备份色彩文件"></a>备份色彩文件</h3><p>SONY 电视出厂校色过的，只要不是驱动板和主板一起坏，色彩文件不会丢，也就是说驱动板和主板里面色彩文件会各备份一个，可以相互拷贝。如果你担心美区主板色彩文件别人动过，那就把国行驱动板种的色彩文件转到美区主板即可。</p>
+<p>第一步：进入电视的服务模式，网上有说用遥控器进入的，我试了多次没有成功。可以使用adb_fastboot进入服务模式，还是在adb connect连接成功后输入命令“adb shell am start -a com.sony.dtv.intent.action.SELF_DIAG_MODE”，电视屏幕上就会弹出一个对话框。</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2026/03/03/17725048305224.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>第二步，使用遥控器进入菜单【Panel&#x2F;PQ 】，然后再进入【WB&#x2F;Mura&#x2F;CUC data transfer 】， 把三个参数选择 【1.T-con-&gt;SoC】， 执行【Start】</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2026/03/03/17725048568573.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>执行完【Start】之后，屏幕上没有任何反应，也没有任何提示，这个时候直接拔掉电源，直接断电。10秒之后插上电源即可。至此，所有设置全部结束。enjoy it !</p>
+<h1 id="系统体验"><a href="#系统体验" class="headerlink" title="系统体验"></a>系统体验</h1><p>更换主板完成好配置之后，我们就可以体验 Google TV 了，界面上再也没有国内冗杂烦人的广告，界面的操作逻辑也更加合理。</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164426365120.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>如果你的 IP 地址和你的 Google 账号区域相对应，电视也会给你推荐相应的内容。我们也可以自己管理在主界面上需要展示的流媒体推荐内容，主流的 Disney +、Apple TV、Prime Video、Hulu 都是支持的，但是缺失了 Netflix，希望 Google TV 能赶紧补全。</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164426447702.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>当然最重要是，可以体验到完整的 Google 生态， Google 生态下所有的服务都可以完整的同步，比如 YouTube Premium 的会员，可以在电视上享受完整的服务内容，不再需要使用第三方的 YouTube 应用进行观看，可以方便的通过 Web 端的 Google Play Store 下载和管理我的电视应用。</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164426531192.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>还可以方便的同步我账号的密码，登陆时自动填充，不再需要遥控器傻傻的进行输入。</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164426621556.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>也可以用上更加智能，且与生态结合的更紧密的 Google Assistant，依靠 Google 强大的搜索能力，能得到几乎最精准的内容，而且支持中文！</p>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164426710920.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>之后就可以彻底告别基于 Android TV 的电视盒子了，因为盒子有的功能，电视全部都可以实现，而且 Sony 电视对杜比音效、杜比全景声、杜比视界等声音特效的支持也远强于普通的电视盒子，至于其他的功能，这里就不再做赘述，大家可以自己去慢慢发觉，就不在此展开了。</p>
+<h1 id="瑕疵-建议"><a href="#瑕疵-建议" class="headerlink" title="瑕疵&amp;建议"></a>瑕疵&amp;建议</h1><p>文章的最后其实还有两个谈不上问题的小瑕疵，希望之后能够解决：</p>
+<ul>
+<li>第一个瑕疵是 Google TV 的 UI 界面的流畅感远远比不上 Apple TV 4k，后者在遥控器反应、系统流畅度、UI 动画上远远领先前者，Android 生态还有非常大的追赶空间。如果你觉得界面有卡顿感，建议在开发者模式中，把所有的动画时间都设置为 x2，能够极大的改善使用体验。</li>
+<li>另外一个瑕疵就是国行 Sony 的遥控器实在是太太太太难用了。很难想象这是 Sony 在 21 世纪设计出来的产品，没有背光，按键过小，导致无法盲操，键位的设计也极度的不合理。关于遥控器罗永浩也在微博上吐槽过了，好在 Sony 自己也发现了问题，在新的 K 系列产品中给出了新款遥控器，可以说是全方位的升级了遥控体验，建议大家有条件可以等一等买海外版本的遥控器。</li>
+</ul>
+<p><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/05/23/17164427041061.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>那么更换主板这件事适合那些人群呢？首先需要具有爱折腾的心且能从中获得快乐；其次就是不想外接一个电视盒子，即使电视盒子基本上能解决80%的问题；然后还得有一些完美主义癖好，想要不断去完善自己的生活质量；最后就是具备一定的动手能力和耐心，如果上述条件你都满足，那么立刻动手吧，整个的成本在不依赖外人帮助的情况下和购买一个电视盒子的花费差距不大。</p>
+<h1 id="尾巴"><a href="#尾巴" class="headerlink" title="尾巴"></a>尾巴</h1><p>因为疫情和等待配件的原因，从获得主板到真正完成更换再到完成所有的设置，踩过了大大小小不少坑。比如最开始我这款电视的主板在 <strong>tvpartstoday</strong> 并没有货，等了很久才有我这个型号的主板，再到朋友从国外帮我人肉带回来主板，到它完成了整个的隔离周期后，才把主板交到我手上，在疫情肆虐的今天，过去成熟的海淘也变得困难重重。但是在付出了大量的时间和精力之后，收获的回报也更让人感到满足，或许这就是折腾的快乐吧。再次感谢整个过程中所有帮助到我的人，我的好朋友、V2EX上的朋友以及 Sony 工程师的尽职尽责的解答，感谢 🙏。</p>
+<div class="note note-info">
+            <p>本文参考自以下博文，版权归原作者所有。</p><p>原文作者：aplsc<br>原文地址：<a target="_blank" rel="noopener" href="https://blog.csdn.net/aplsc/article/details/128669336">给国行Sony9500H更换美区950H主板</a></p>
+          </div>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%99%BA%E6%85%A7%E5%AE%B6%E5%BA%AD/" class="category-chain-item">智慧家庭</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/" class="print-no-link">#网络设备</a>
+      
+        <a href="/tags/%E6%99%BA%E6%85%A7%E5%AE%B6%E5%BA%AD/" class="print-no-link">#智慧家庭</a>
+      
+        <a href="/tags/Sony%E7%94%B5%E8%A7%86/" class="print-no-link">#Sony电视</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程</div>
+      <div>https://blog.firstmetcs.net/2024/05/23/国行 Sony A80J电视更换美区主板最详教程/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>firstmetcs</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年5月23日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/06/21/Spring%20Security%20OAuth2%20%E4%BC%98%E9%9B%85%E7%9A%84%E9%9B%86%E6%88%90%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E4%BB%A5%E5%8F%8A%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/" title="Spring Security OAuth2 优雅的集成短信验证码登录以及第三方登录">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Spring Security OAuth2 优雅的集成短信验证码登录以及第三方登录</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/09/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE%E6%8E%A5%E5%85%A5cas/" title="前后端分离项目接入cas">
+                        <span class="hidden-mobile">前后端分离项目接入cas</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'firstmetcs/blog-comments');
+      s.setAttribute('issue-term', 'pathname');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <div style="font-size: 0.85rem">© 2015-<span id="year">2023</span> <a href="https://firstmetcs.net" target="_blank">firstmetcs.net</a> 版权所有</div><script type="text/javascript">function initCopyrightYear() {document.getElementById("year").innerHTML = new Date().getFullYear();}initCopyrightYear();</script>
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      京ICP备2023003449号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502051927"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>京公网安备11010502051927号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

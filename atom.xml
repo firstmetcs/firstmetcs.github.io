@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Fsmt blog</title>
+  
+  <subtitle>firstmetcs log</subtitle>
+  <link href="https://blog.firstmetcs.net/atom.xml" rel="self"/>
+  
+  <link href="https://blog.firstmetcs.net/"/>
+  <updated>2026-04-07T06:07:40.000Z</updated>
+  <id>https://blog.firstmetcs.net/</id>
+  
+  <author>
+    <name>firstmetcs</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>oh-my-zsh 主题显示命令执行时间和当前时间</title>
+    <link href="https://blog.firstmetcs.net/2026/04/07/oh-my-zsh%20%E4%B8%BB%E9%A2%98%E6%98%BE%E7%A4%BA%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%97%B6%E9%97%B4%E5%92%8C%E5%BD%93%E5%89%8D%E6%97%B6%E9%97%B4/"/>
+    <id>https://blog.firstmetcs.net/2026/04/07/oh-my-zsh%20%E4%B8%BB%E9%A2%98%E6%98%BE%E7%A4%BA%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%97%B6%E9%97%B4%E5%92%8C%E5%BD%93%E5%89%8D%E6%97%B6%E9%97%B4/</id>
+    <published>2026-04-07T06:07:40.000Z</published>
+    <updated>2026-04-07T06:07:40.000Z</updated>
+    
+    
+    <summary type="html">本文介绍如何在oh-my-zsh主题中显示命令执行时间。通过修改默认主题robbyrussell，添加特定函数preexec和precmd，可以实现在提示符中显示上一条命令的执行时间。此外，提供了一键安装脚本，方便用户快速配置。</summary>
+    
+    
+    
+    <category term="iTerm2" scheme="https://blog.firstmetcs.net/categories/iTerm2/"/>
+    
+    
+    <category term="iTerm2" scheme="https://blog.firstmetcs.net/tags/iTerm2/"/>
+    
+    <category term="zsh" scheme="https://blog.firstmetcs.net/tags/zsh/"/>
+    
+    <category term="终端" scheme="https://blog.firstmetcs.net/tags/%E7%BB%88%E7%AB%AF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MacOS 定制终端：iTerm2 + zsh + powerline</title>
+    <link href="https://blog.firstmetcs.net/2026/04/02/MacOS%20%E5%AE%9A%E5%88%B6%E7%BB%88%E7%AB%AF%EF%BC%9AiTerm2%20&amp;%20zsh%20&amp;%20powerline/"/>
+    <id>https://blog.firstmetcs.net/2026/04/02/MacOS%20%E5%AE%9A%E5%88%B6%E7%BB%88%E7%AB%AF%EF%BC%9AiTerm2%20&amp;%20zsh%20&amp;%20powerline/</id>
+    <published>2026-04-02T04:08:08.000Z</published>
+    <updated>2026-04-02T04:08:08.000Z</updated>
+    
+    
+    <summary type="html">本文主要记录了 MacOS 终端使用iTerm2配置zsh的定制。</summary>
+    
+    
+    
+    <category term="iTerm2" scheme="https://blog.firstmetcs.net/categories/iTerm2/"/>
+    
+    
+    <category term="iTerm2" scheme="https://blog.firstmetcs.net/tags/iTerm2/"/>
+    
+    <category term="zsh" scheme="https://blog.firstmetcs.net/tags/zsh/"/>
+    
+    <category term="终端" scheme="https://blog.firstmetcs.net/tags/%E7%BB%88%E7%AB%AF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MoviePilot安装配置及站点认证教程</title>
+    <link href="https://blog.firstmetcs.net/2026/01/14/MoviePilot%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%AB%99%E7%82%B9%E8%AE%A4%E8%AF%81%E6%95%99%E7%A8%8B/"/>
+    <id>https://blog.firstmetcs.net/2026/01/14/MoviePilot%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%AB%99%E7%82%B9%E8%AE%A4%E8%AF%81%E6%95%99%E7%A8%8B/</id>
+    <published>2026-01-14T05:20:55.000Z</published>
+    <updated>2026-01-14T05:20:55.000Z</updated>
+    
+    
+    <summary type="html">MoviePilot的作者听说也是nastools原作者，之前我们介绍过nastools《家庭影音系统及PT站玩家必备？nastools能解决什么痛点？》，MoviePilot的功能和使用上做了精简，更好上手。爱折腾的可以装一个，和nastools对比一下，说不定可以替代nastools，我就放弃了nastools用MoviePilot了。下面给大家简单说说MoviePilot的安装配置及站点认证。</summary>
+    
+    
+    
+    <category term="NAS" scheme="https://blog.firstmetcs.net/categories/NAS/"/>
+    
+    
+    <category term="NAS" scheme="https://blog.firstmetcs.net/tags/NAS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>C#设置软件开机自启动</title>
+    <link href="https://blog.firstmetcs.net/2025/06/27/Csharp%E8%AE%BE%E7%BD%AE%E8%BD%AF%E4%BB%B6%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8/"/>
+    <id>https://blog.firstmetcs.net/2025/06/27/Csharp%E8%AE%BE%E7%BD%AE%E8%BD%AF%E4%BB%B6%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8/</id>
+    <published>2025-06-27T07:10:20.000Z</published>
+    <updated>2025-06-27T07:10:20.000Z</updated>
+    
+    
+    <summary type="html">通过C#操作注册表来实现软件开机自启动，并解决无法以管理员权限运行的问题</summary>
+    
+    
+    
+    <category term="C#" scheme="https://blog.firstmetcs.net/categories/C/"/>
+    
+    
+    <category term="C#" scheme="https://blog.firstmetcs.net/tags/C/"/>
+    
+    <category term="注册表" scheme="https://blog.firstmetcs.net/tags/%E6%B3%A8%E5%86%8C%E8%A1%A8/"/>
+    
+    <category term="开机启动" scheme="https://blog.firstmetcs.net/tags/%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8/"/>
+    
+    <category term="winform" scheme="https://blog.firstmetcs.net/tags/winform/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Windows开机启动软件、执行脚本，免登录账户</title>
+    <link href="https://blog.firstmetcs.net/2025/04/26/Windows%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E8%BD%AF%E4%BB%B6%E3%80%81%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC%EF%BC%8C%E5%85%8D%E7%99%BB%E5%BD%95%E8%B4%A6%E6%88%B7/"/>
+    <id>https://blog.firstmetcs.net/2025/04/26/Windows%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E8%BD%AF%E4%BB%B6%E3%80%81%E6%89%A7%E8%A1%8C%E8%84%9A%E6%9C%AC%EF%BC%8C%E5%85%8D%E7%99%BB%E5%BD%95%E8%B4%A6%E6%88%B7/</id>
+    <published>2025-04-26T07:30:00.000Z</published>
+    <updated>2025-04-26T07:30:00.000Z</updated>
+    
+    
+    <summary type="html">本文介绍了如何在Windows10中利用任务计划程序创建自启动任务，无需登录账户即可运行指定的软件或脚本。步骤包括打开任务计划程序，创建新文件夹，设置任务的常规信息，定义触发器和操作，以及添加运行条件。最后，通过重启电脑来检验任务是否成功执行。</summary>
+    
+    
+    
+    <category term="Windows" scheme="https://blog.firstmetcs.net/categories/Windows/"/>
+    
+    
+    <category term="开机启动" scheme="https://blog.firstmetcs.net/tags/%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8/"/>
+    
+    <category term="Windows" scheme="https://blog.firstmetcs.net/tags/Windows/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>NAS新玩法！结合豆瓣app轻松实现自动下载电影自动追剧功能</title>
+    <link href="https://blog.firstmetcs.net/2025/04/02/NAS%E6%96%B0%E7%8E%A9%E6%B3%95%EF%BC%81%E7%BB%93%E5%90%88%E8%B1%86%E7%93%A3app%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E4%B8%8B%E8%BD%BD%E7%94%B5%E5%BD%B1%E8%87%AA%E5%8A%A8%E8%BF%BD%E5%89%A7%E5%8A%9F%E8%83%BD/"/>
+    <id>https://blog.firstmetcs.net/2025/04/02/NAS%E6%96%B0%E7%8E%A9%E6%B3%95%EF%BC%81%E7%BB%93%E5%90%88%E8%B1%86%E7%93%A3app%E8%BD%BB%E6%9D%BE%E5%AE%9E%E7%8E%B0%E8%87%AA%E5%8A%A8%E4%B8%8B%E8%BD%BD%E7%94%B5%E5%BD%B1%E8%87%AA%E5%8A%A8%E8%BF%BD%E5%89%A7%E5%8A%9F%E8%83%BD/</id>
+    <published>2025-04-02T07:55:20.000Z</published>
+    <updated>2025-04-02T07:55:20.000Z</updated>
+    
+    
+    <summary type="html">哪个NAS玩家不想拥有一个属于自己的家庭影音库呢？想象这样一个场景，你在白天上班摸鱼的间隙打开手机豆瓣app，刷到一部感兴趣的高分电影，这时你轻轻点击了海报上方的想看按钮，等晚上回到家里，那部电影就已经下载到你的NAS里面了，你只需要打开电视，映入眼帘的是一幅精美的海报墙，再使用遥控器点击播放，可以尽情享受观影的乐趣。在这期间影片版本的选择、下载、海报削刮、媒体库同步全部都是自动完成，你唯一要做的事情就是在豆瓣上点了个想看，这就是nastool的核心功能，让追剧的过程智能化、自动化、简单化。</summary>
+    
+    
+    
+    <category term="NAS" scheme="https://blog.firstmetcs.net/categories/NAS/"/>
+    
+    
+    <category term="NAS" scheme="https://blog.firstmetcs.net/tags/NAS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【MacBook科研】教你大幅提高MATLAB运算速度</title>
+    <link href="https://blog.firstmetcs.net/2024/10/10/[MacBook%E7%A7%91%E7%A0%94]%E6%95%99%E4%BD%A0%E5%A4%A7%E5%B9%85%E6%8F%90%E9%AB%98MATLAB%E8%BF%90%E7%AE%97%E9%80%9F%E5%BA%A6/"/>
+    <id>https://blog.firstmetcs.net/2024/10/10/[MacBook%E7%A7%91%E7%A0%94]%E6%95%99%E4%BD%A0%E5%A4%A7%E5%B9%85%E6%8F%90%E9%AB%98MATLAB%E8%BF%90%E7%AE%97%E9%80%9F%E5%BA%A6/</id>
+    <published>2024-10-10T00:30:00.000Z</published>
+    <updated>2024-10-10T00:30:00.000Z</updated>
+    
+    
+    <summary type="html">苹果的M芯片内置了AMX单元，可以加速矩阵运算，提高科研效率。现在MATLAB也可以通过调用Apple Accelerate来使用AMX单元加速运算，只需改变MATLAB调用的BLAS库即可。</summary>
+    
+    
+    
+    <category term="Matlab" scheme="https://blog.firstmetcs.net/categories/Matlab/"/>
+    
+    
+    <category term="Matlab" scheme="https://blog.firstmetcs.net/tags/Matlab/"/>
+    
+    <category term="MacBook" scheme="https://blog.firstmetcs.net/tags/MacBook/"/>
+    
+    <category term="科研" scheme="https://blog.firstmetcs.net/tags/%E7%A7%91%E7%A0%94/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Nginx去掉前端配置的路径前缀</title>
+    <link href="https://blog.firstmetcs.net/2024/09/10/Nginx%E5%8E%BB%E6%8E%89%E5%89%8D%E7%AB%AF%E9%85%8D%E7%BD%AE%E7%9A%84%E8%B7%AF%E5%BE%84%E5%89%8D%E7%BC%80/"/>
+    <id>https://blog.firstmetcs.net/2024/09/10/Nginx%E5%8E%BB%E6%8E%89%E5%89%8D%E7%AB%AF%E9%85%8D%E7%BD%AE%E7%9A%84%E8%B7%AF%E5%BE%84%E5%89%8D%E7%BC%80/</id>
+    <published>2024-09-10T03:00:00.000Z</published>
+    <updated>2024-09-10T03:00:00.000Z</updated>
+    
+    
+    <summary type="html">在前端项目部署到Nginx的时候，前端访问后端的路径加了一个全局前缀，一般来说这是前后端商量好的，但是也会有不一般的情况，后端在遇到这种情况的时候有两种选择</summary>
+    
+    
+    
+    <category term="Nginx" scheme="https://blog.firstmetcs.net/categories/Nginx/"/>
+    
+    
+    <category term="Nginx" scheme="https://blog.firstmetcs.net/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spring Security OAuth2 优雅的集成短信验证码登录以及第三方登录</title>
+    <link href="https://blog.firstmetcs.net/2024/06/21/Spring%20Security%20OAuth2%20%E4%BC%98%E9%9B%85%E7%9A%84%E9%9B%86%E6%88%90%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E4%BB%A5%E5%8F%8A%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/"/>
+    <id>https://blog.firstmetcs.net/2024/06/21/Spring%20Security%20OAuth2%20%E4%BC%98%E9%9B%85%E7%9A%84%E9%9B%86%E6%88%90%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81%E7%99%BB%E5%BD%95%E4%BB%A5%E5%8F%8A%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/</id>
+    <published>2024-06-21T07:30:00.000Z</published>
+    <updated>2024-06-21T07:30:00.000Z</updated>
+    
+    
+    <summary type="html">基于不侵入Spring Security OAuth2的原有代码、对于不同的登录方式不扩展新的端点、可以对所有登录方式进行兼容，介绍如何开发一套集成登录认证组件。</summary>
+    
+    
+    
+    <category term="Spring Security OAuth2" scheme="https://blog.firstmetcs.net/categories/Spring-Security-OAuth2/"/>
+    
+    
+    <category term="Spring Security OAuth2" scheme="https://blog.firstmetcs.net/tags/Spring-Security-OAuth2/"/>
+    
+    <category term="短信登录" scheme="https://blog.firstmetcs.net/tags/%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程</title>
+    <link href="https://blog.firstmetcs.net/2024/05/23/%E5%9B%BD%E8%A1%8C%20Sony%20A80J%E7%94%B5%E8%A7%86%E6%9B%B4%E6%8D%A2%E7%BE%8E%E5%8C%BA%E4%B8%BB%E6%9D%BF%E6%9C%80%E8%AF%A6%E6%95%99%E7%A8%8B/"/>
+    <id>https://blog.firstmetcs.net/2024/05/23/%E5%9B%BD%E8%A1%8C%20Sony%20A80J%E7%94%B5%E8%A7%86%E6%9B%B4%E6%8D%A2%E7%BE%8E%E5%8C%BA%E4%B8%BB%E6%9D%BF%E6%9C%80%E8%AF%A6%E6%95%99%E7%A8%8B/</id>
+    <published>2024-05-23T05:30:20.000Z</published>
+    <updated>2024-05-23T05:30:20.000Z</updated>
+    
+    
+    <summary type="html">不想加装电视盒子，又不满意国行 Sony 电视原生系统怎么办？——国行 Sony A80J电视更换美区主板最详教程</summary>
+    
+    
+    
+    <category term="智慧家庭" scheme="https://blog.firstmetcs.net/categories/%E6%99%BA%E6%85%A7%E5%AE%B6%E5%BA%AD/"/>
+    
+    
+    <category term="网络设备" scheme="https://blog.firstmetcs.net/tags/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/"/>
+    
+    <category term="智慧家庭" scheme="https://blog.firstmetcs.net/tags/%E6%99%BA%E6%85%A7%E5%AE%B6%E5%BA%AD/"/>
+    
+    <category term="Sony电视" scheme="https://blog.firstmetcs.net/tags/Sony%E7%94%B5%E8%A7%86/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>前后端分离项目接入cas</title>
+    <link href="https://blog.firstmetcs.net/2024/04/09/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE%E6%8E%A5%E5%85%A5cas/"/>
+    <id>https://blog.firstmetcs.net/2024/04/09/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE%E6%8E%A5%E5%85%A5cas/</id>
+    <published>2024-04-09T04:10:00.000Z</published>
+    <updated>2024-04-09T04:10:00.000Z</updated>
+    
+    
+    <summary type="html">本文简单介绍基于Spring Security OAuth2和umi request的前后端分离项目接入CAS。</summary>
+    
+    
+    
+    <category term="Spring Security OAuth2" scheme="https://blog.firstmetcs.net/categories/Spring-Security-OAuth2/"/>
+    
+    <category term="CAS" scheme="https://blog.firstmetcs.net/categories/Spring-Security-OAuth2/CAS/"/>
+    
+    
+    <category term="Spring Security OAuth2" scheme="https://blog.firstmetcs.net/tags/Spring-Security-OAuth2/"/>
+    
+    <category term="CAS" scheme="https://blog.firstmetcs.net/tags/CAS/"/>
+    
+    <category term="前后端分离" scheme="https://blog.firstmetcs.net/tags/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB/"/>
+    
+    <category term="umi" scheme="https://blog.firstmetcs.net/tags/umi/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Spring Security OAuth2+CAS（添加cas模式）</title>
+    <link href="https://blog.firstmetcs.net/2024/04/08/Spring%20Security%20OAuth2&amp;CAS%EF%BC%88%E6%B7%BB%E5%8A%A0cas%E6%A8%A1%E5%BC%8F%EF%BC%89/"/>
+    <id>https://blog.firstmetcs.net/2024/04/08/Spring%20Security%20OAuth2&amp;CAS%EF%BC%88%E6%B7%BB%E5%8A%A0cas%E6%A8%A1%E5%BC%8F%EF%BC%89/</id>
+    <published>2024-04-08T04:50:00.000Z</published>
+    <updated>2024-04-08T04:50:00.000Z</updated>
+    
+    
+    <summary type="html">本文简单介绍Spring Security OAuth2接入CAS并添加cas模式，现有的Spring Security OAuth2的认证对接cas认证中心。</summary>
+    
+    
+    
+    <category term="Spring Security OAuth2" scheme="https://blog.firstmetcs.net/categories/Spring-Security-OAuth2/"/>
+    
+    <category term="CAS" scheme="https://blog.firstmetcs.net/categories/Spring-Security-OAuth2/CAS/"/>
+    
+    
+    <category term="Spring Security OAuth2" scheme="https://blog.firstmetcs.net/tags/Spring-Security-OAuth2/"/>
+    
+    <category term="CAS" scheme="https://blog.firstmetcs.net/tags/CAS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>iStoreOS使用阿里云ddns+https</title>
+    <link href="https://blog.firstmetcs.net/2024/01/30/iStoreOS%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91ddns&amp;https/"/>
+    <id>https://blog.firstmetcs.net/2024/01/30/iStoreOS%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91ddns&amp;https/</id>
+    <published>2024-01-30T12:50:20.000Z</published>
+    <updated>2024-01-30T12:50:20.000Z</updated>
+    
+    
+    <summary type="html">本文简单介绍使用iStoreOS配置阿里云ddns和https</summary>
+    
+    
+    
+    <category term="软路由" scheme="https://blog.firstmetcs.net/categories/%E8%BD%AF%E8%B7%AF%E7%94%B1/"/>
+    
+    
+    <category term="软路由" scheme="https://blog.firstmetcs.net/tags/%E8%BD%AF%E8%B7%AF%E7%94%B1/"/>
+    
+    <category term="ddns" scheme="https://blog.firstmetcs.net/tags/ddns/"/>
+    
+    <category term="aliddns" scheme="https://blog.firstmetcs.net/tags/aliddns/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>家庭公网 IP 的配置与应用</title>
+    <link href="https://blog.firstmetcs.net/2024/01/26/%E5%AE%B6%E5%BA%AD%E5%85%AC%E7%BD%91IP%E7%9A%84%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%BA%94%E7%94%A8/"/>
+    <id>https://blog.firstmetcs.net/2024/01/26/%E5%AE%B6%E5%BA%AD%E5%85%AC%E7%BD%91IP%E7%9A%84%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%BA%94%E7%94%A8/</id>
+    <published>2024-01-26T06:07:20.000Z</published>
+    <updated>2024-01-26T06:07:20.000Z</updated>
+    
+    
+    <summary type="html">本文主要记录了家庭公网 IP 的申请和配置（以上海电信为例），以及在 NAS 管理等场景的应用。</summary>
+    
+    
+    
+    <category term="软路由" scheme="https://blog.firstmetcs.net/categories/%E8%BD%AF%E8%B7%AF%E7%94%B1/"/>
+    
+    
+    <category term="NAS" scheme="https://blog.firstmetcs.net/tags/NAS/"/>
+    
+    <category term="软路由" scheme="https://blog.firstmetcs.net/tags/%E8%BD%AF%E8%B7%AF%E7%94%B1/"/>
+    
+    <category term="网络设备" scheme="https://blog.firstmetcs.net/tags/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87/"/>
+    
+    <category term="公网IP" scheme="https://blog.firstmetcs.net/tags/%E5%85%AC%E7%BD%91IP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>从零开始搭建家庭软路由系统（安装OpenWrt，并做为旁路由接入家庭网络）</title>
+    <link href="https://blog.firstmetcs.net/2024/01/26/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BA%E5%AE%B6%E5%BA%AD%E8%BD%AF%E8%B7%AF%E7%94%B1%E7%B3%BB%E7%BB%9F/"/>
+    <id>https://blog.firstmetcs.net/2024/01/26/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E6%90%AD%E5%BB%BA%E5%AE%B6%E5%BA%AD%E8%BD%AF%E8%B7%AF%E7%94%B1%E7%B3%BB%E7%BB%9F/</id>
+    <published>2024-01-26T05:30:00.000Z</published>
+    <updated>2024-01-26T05:30:00.000Z</updated>
+    
+    
+    <summary type="html">整理了安装OpenWrt，并做为旁路由接入家庭网络的方法，希望帮到刚入手软路由的小伙伴，轻松搭建软路由~</summary>
+    
+    
+    
+    <category term="软路由" scheme="https://blog.firstmetcs.net/categories/%E8%BD%AF%E8%B7%AF%E7%94%B1/"/>
+    
+    
+    <category term="软路由" scheme="https://blog.firstmetcs.net/tags/%E8%BD%AF%E8%B7%AF%E7%94%B1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>redis集群的搭建和使用</title>
+    <link href="https://blog.firstmetcs.net/2024/01/01/redis%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8/"/>
+    <id>https://blog.firstmetcs.net/2024/01/01/redis%E9%9B%86%E7%BE%A4%E7%9A%84%E6%90%AD%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8/</id>
+    <published>2024-01-01T10:30:20.000Z</published>
+    <updated>2024-01-02T03:06:37.000Z</updated>
+    
+    
+    <summary type="html">本篇知识分享主要讲述使用docker搭建redis集群，其中包含redis简单主从模式、哨兵模式和springboot整合redis集群等，适合初学者入门搭建和使用参考。</summary>
+    
+    
+    
+    <category term="Redis" scheme="https://blog.firstmetcs.net/categories/Redis/"/>
+    
+    
+    <category term="原创" scheme="https://blog.firstmetcs.net/tags/%E5%8E%9F%E5%88%9B/"/>
+    
+    <category term="Redis" scheme="https://blog.firstmetcs.net/tags/Redis/"/>
+    
+    <category term="Redis sentinel" scheme="https://blog.firstmetcs.net/tags/Redis-sentinel/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【置顶】站点公告</title>
+    <link href="https://blog.firstmetcs.net/2024/01/01/%E7%AB%99%E7%82%B9%E5%85%AC%E5%91%8A/"/>
+    <id>https://blog.firstmetcs.net/2024/01/01/%E7%AB%99%E7%82%B9%E5%85%AC%E5%91%8A/</id>
+    <published>2024-01-01T10:30:20.000Z</published>
+    <updated>2024-01-01T10:30:20.000Z</updated>
+    
+    
+    <summary type="html">欢迎来到我的博客🍀，共同进步，玩的开心</summary>
+    
+    
+    
+    <category term="站点公告" scheme="https://blog.firstmetcs.net/categories/%E7%AB%99%E7%82%B9%E5%85%AC%E5%91%8A/"/>
+    
+    
+    <category term="站点公告" scheme="https://blog.firstmetcs.net/tags/%E7%AB%99%E7%82%B9%E5%85%AC%E5%91%8A/"/>
+    
+  </entry>
+  
+</feed>

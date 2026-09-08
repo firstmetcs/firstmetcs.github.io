@@ -1,0 +1,816 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/f.png">
+  <link rel="icon" href="/img/f.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="firstmetcs">
+  <meta name="keywords" content="Fsmt blog,共同进步 Fsmt,Fsmt,fsmt,firstmetcs">
+  
+    <meta name="description" content="本文简单介绍Spring Security OAuth2接入CAS并添加cas模式，现有的Spring Security OAuth2的认证对接cas认证中心。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring Security OAuth2+CAS（添加cas模式）">
+<meta property="og:url" content="https://blog.firstmetcs.net/2024/04/08/Spring%20Security%20OAuth2&CAS%EF%BC%88%E6%B7%BB%E5%8A%A0cas%E6%A8%A1%E5%BC%8F%EF%BC%89/index.html">
+<meta property="og:site_name" content="Fsmt blog">
+<meta property="og:description" content="本文简单介绍Spring Security OAuth2接入CAS并添加cas模式，现有的Spring Security OAuth2的认证对接cas认证中心。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fsmt-blog.oss-cn-beijing.aliyuncs.com/cover/spring-security.webp">
+<meta property="article:published_time" content="2024-04-08T04:50:00.000Z">
+<meta property="article:modified_time" content="2024-04-08T04:50:00.000Z">
+<meta property="article:author" content="firstmetcs">
+<meta property="article:tag" content="Spring Security OAuth2">
+<meta property="article:tag" content="CAS">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://fsmt-blog.oss-cn-beijing.aliyuncs.com/cover/spring-security.webp">
+  
+  
+  
+     <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+  
+  <title>Spring Security OAuth2+CAS（添加cas模式） - Fsmt blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"blog.firstmetcs.net","root":"/","version":"1.9.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":"cedb334c71d9c14c4f0337d5e60aa43c","google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+    <!-- Baidu Analytics -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?cedb334c71d9c14c4f0337d5e60aa43c";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+      }
+    </script>
+  
+
+  
+    <!-- Google tag (gtag.js) -->
+    <script async>
+      if (!Fluid.ctx.dnt) {
+        Fluid.utils.createScript("https://www.googletagmanager.com/gtag/js?id=", function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', '');
+        });
+      }
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Fsmt blog" type="application/atom+xml">
+</head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fsmt blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('https://fsmt-blog.oss-cn-beijing.aliyuncs.com/cover/spring-security-oauth.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Spring Security OAuth2+CAS（添加cas模式）"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-08 12:50" pubdate>
+          2024年4月8日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          711 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          6 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Spring Security OAuth2+CAS（添加cas模式）</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-info">
+            <p>本文由 Fluid 用户授权转载，版权归原作者所有。</p><p>本文作者：纸上得来终觉浅，绝知此事要躬行<br>原文地址：<a target="_blank" rel="noopener" href="https://blog.csdn.net/a294634473/article/details/109692209">https://blog.csdn.net/a294634473/article/details/109692209</a></p>
+          </div>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Spring Security OAuth2 自带有4中模式，有些特殊情况是需要自定义。（本文的前提是需要知道如何添加自定义的模式）<br>现在的需求是现有的Spring Security OAuth2的认证对接cas认证中心。</p>
+<h1 id="maven"><a href="#maven" class="headerlink" title="maven"></a>maven</h1><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.security<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-security-cas<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>5.0.6.RELEASE<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h1 id="添加CasTicketTokenGranter"><a href="#添加CasTicketTokenGranter" class="headerlink" title="添加CasTicketTokenGranter"></a>添加CasTicketTokenGranter</h1><p>这里的grant_type 就是这里定义的cas_ticket</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">CasTicketTokenGranter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">AbstractTokenGranter</span> &#123;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-type">String</span> <span class="hljs-variable">GRANT_TYPE</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;cas_ticket&quot;</span>;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> AuthenticationManager authenticationManager;<br><br>    <span class="hljs-type">public</span> <span class="hljs-title function_">CasTicketTokenGranter</span><span class="hljs-params">(AuthenticationManager authenticationManager,</span><br><span class="hljs-params">                                 AuthorizationServerTokenServices tokenServices, ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory)</span> &#123;<br>        <span class="hljs-built_in">this</span>(authenticationManager, tokenServices, clientDetailsService, requestFactory, GRANT_TYPE);<br>    &#125;<br><br>    <span class="hljs-type">protected</span> <span class="hljs-title function_">CasTicketTokenGranter</span><span class="hljs-params">(AuthenticationManager authenticationManager, AuthorizationServerTokenServices tokenServices,</span><br><span class="hljs-params">                                    ClientDetailsService clientDetailsService, OAuth2RequestFactory requestFactory, String grantType)</span> &#123;<br>        <span class="hljs-built_in">super</span>(tokenServices, clientDetailsService, requestFactory, grantType);<br>        <span class="hljs-built_in">this</span>.authenticationManager = authenticationManager;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">OAuth2AccessToken</span> <span class="hljs-title function_">grant</span><span class="hljs-params">(String grantType, TokenRequest tokenRequest)</span> &#123;<br>        <span class="hljs-type">OAuth2AccessToken</span> <span class="hljs-variable">token</span> <span class="hljs-operator">=</span> <span class="hljs-built_in">super</span>.grant(grantType, tokenRequest);<br>        <span class="hljs-keyword">if</span> (token != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-type">DefaultOAuth2AccessToken</span> <span class="hljs-variable">norefresh</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DefaultOAuth2AccessToken</span>(token);<br>            <span class="hljs-comment">// The spec says that cas ticket should not be allowed to get a refresh token</span><br>            norefresh.setRefreshToken(<span class="hljs-literal">null</span>);<br>            token = norefresh;<br>        &#125;<br>        <span class="hljs-keyword">return</span> token;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">OAuth2Authentication</span> <span class="hljs-title function_">getOAuth2Authentication</span><span class="hljs-params">(ClientDetails client, TokenRequest tokenRequest)</span> &#123;<br><br>        <span class="hljs-type">Map</span>&lt;String, String&gt; <span class="hljs-variable">parameters</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LinkedHashMap</span>&lt;String, String&gt;(tokenRequest.getRequestParameters());<br>        <span class="hljs-type">String</span> <span class="hljs-variable">username</span> <span class="hljs-operator">=</span> CasAuthenticationFilter.CAS_STATEFUL_IDENTIFIER;<br>        <span class="hljs-type">String</span> <span class="hljs-variable">password</span> <span class="hljs-operator">=</span> parameters.get(<span class="hljs-string">&quot;ticket&quot;</span>);<br><br>        <span class="hljs-keyword">if</span> (password == <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">InvalidRequestException</span>(<span class="hljs-string">&quot;A cas ticket must be supplied.&quot;</span>);<br>        &#125;<br><br>        <span class="hljs-type">Authentication</span> <span class="hljs-variable">userAuth</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UsernamePasswordAuthenticationToken</span>(username, password);<br>        ((AbstractAuthenticationToken) userAuth).setDetails(parameters);<br>        <span class="hljs-keyword">try</span> &#123;<br>            userAuth = authenticationManager.authenticate(userAuth);<br>        &#125;<br>        <span class="hljs-keyword">catch</span> (AccountStatusException ase) &#123;<br>            <span class="hljs-comment">//covers expired, locked, disabled cases (mentioned in section 5.2, draft 31)</span><br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">InvalidGrantException</span>(ase.getMessage());<br>        &#125;<br>        <span class="hljs-keyword">catch</span> (BadCredentialsException e) &#123;<br>            <span class="hljs-comment">// If the ticket is wrong the spec says we should send 400/invalid grant</span><br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">InvalidGrantException</span>(e.getMessage());<br>        &#125;<br>        <span class="hljs-keyword">if</span> (userAuth == <span class="hljs-literal">null</span> || !userAuth.isAuthenticated()) &#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">InvalidGrantException</span>(<span class="hljs-string">&quot;Could not authenticate ticket: &quot;</span> + password);<br>        &#125;<br><br>        <span class="hljs-type">OAuth2Request</span> <span class="hljs-variable">storedOAuth2Request</span> <span class="hljs-operator">=</span> getRequestFactory().createOAuth2Request(client, tokenRequest);<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OAuth2Authentication</span>(storedOAuth2Request, userAuth);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="tokenGranters中添加自定义的cas模式"><a href="#tokenGranters中添加自定义的cas模式" class="headerlink" title="tokenGranters中添加自定义的cas模式"></a>tokenGranters中添加自定义的cas模式</h1><p>注意看最下面</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-type">List</span>&lt;TokenGranter&gt; <span class="hljs-title function_">getDefaultTokenGranters</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">AuthorizationServerTokenServices</span> <span class="hljs-variable">tokenServices</span> <span class="hljs-operator">=</span> tokenServices();<br>        <span class="hljs-type">AuthorizationCodeServices</span> <span class="hljs-variable">authorizationCodeServices</span> <span class="hljs-operator">=</span> authorizationCodeServices();<br>        <span class="hljs-type">OAuth2RequestFactory</span> <span class="hljs-variable">requestFactory</span> <span class="hljs-operator">=</span> requestFactory();<br><br>        <span class="hljs-type">List</span>&lt;TokenGranter&gt; <span class="hljs-variable">tokenGranters</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;TokenGranter&gt;();<br>        <span class="hljs-comment">// 添加授权码模式</span><br>        tokenGranters.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">AuthorizationCodeTokenGranter</span>(tokenServices, authorizationCodeServices, clientDetailsService, requestFactory));<br>        <span class="hljs-comment">// 添加刷新令牌的模式</span><br>        tokenGranters.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">RefreshTokenGranter</span>(tokenServices, clientDetailsService, requestFactory));<br>        <span class="hljs-comment">// 添加隐士授权模式</span><br>        tokenGranters.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ImplicitTokenGranter</span>(tokenServices, clientDetailsService, requestFactory));<br>        <span class="hljs-comment">// 添加客户端模式</span><br>        tokenGranters.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ClientCredentialsTokenGranter</span>(tokenServices, clientDetailsService, requestFactory));<br>        <span class="hljs-keyword">if</span> (authenticationManager != <span class="hljs-literal">null</span>) &#123;<br>            <span class="hljs-comment">// 添加密码模式</span><br>            tokenGranters.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">ResourceOwnerPasswordTokenGranter</span>(authenticationManager, tokenServices, clientDetailsService, requestFactory));<br>            <span class="hljs-comment">// 添加自定义授权模式（手机号码）</span><br>            tokenGranters.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">MobileCodeTokenGranter</span>(authenticationManager, tokenServices, clientDetailsService, requestFactory));<br>            <span class="hljs-comment">// 添加自定义授权模式（cas)</span><br>            tokenGranters.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">CasTicketTokenGranter</span>(authenticationManager, tokenServices, clientDetailsService, requestFactory));<br>        &#125;<br>        <span class="hljs-keyword">return</span> tokenGranters;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="添加CasAuthenticationProvider"><a href="#添加CasAuthenticationProvider" class="headerlink" title="添加CasAuthenticationProvider"></a>添加CasAuthenticationProvider</h1><p>注意cas携带的service地址要和 serviceProperties.setService()这里的地址一样</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">String</span> <span class="hljs-variable">casServerUrlPrefix</span><span class="hljs-operator">=</span><span class="hljs-string">&quot;http://127.0.0.1:8081/cas&quot;</span>;<br><span class="hljs-meta">@Bean(&quot;pgtStorage&quot;)</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-type">ProxyGrantingTicketStorageImpl</span> <span class="hljs-title function_">proxyGrantingTicketStorageImpl</span><span class="hljs-params">()</span>&#123;<br>       <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ProxyGrantingTicketStorageImpl</span>();<br>   &#125;<br><br>   <span class="hljs-meta">@Bean(&quot;casAuthenticationProvider&quot;)</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-type">CasAuthenticationProvider</span> <span class="hljs-title function_">casAuthenticationProvider</span><span class="hljs-params">()</span>&#123;<br>       <span class="hljs-type">CasAuthenticationProvider</span> <span class="hljs-variable">authenticationProvider</span><span class="hljs-operator">=</span><span class="hljs-keyword">new</span> <span class="hljs-title class_">CasAuthenticationProvider</span>();<br>       authenticationProvider.setKey(<span class="hljs-string">&quot;casProvider&quot;</span>) ;<br>       authenticationProvider.setAuthenticationUserDetailsService(OauthCasService);<br>       <span class="hljs-type">Cas20ProxyTicketValidator</span> <span class="hljs-variable">ticketValidator</span><span class="hljs-operator">=</span><span class="hljs-keyword">new</span> <span class="hljs-title class_">Cas20ProxyTicketValidator</span>(casServerUrlPrefix);<br>       ticketValidator.setAcceptAnyProxy(<span class="hljs-literal">true</span>);<span class="hljs-comment">//允许所有代理回调链接</span><br>       ticketValidator.setProxyGrantingTicketStorage(proxyGrantingTicketStorageImpl());<br>       authenticationProvider.setTicketValidator(ticketValidator);<br>       authenticationProvider.setServiceProperties(serviceProperties());<br>       <span class="hljs-keyword">return</span> authenticationProvider;<br>   &#125;<br><br>   <span class="hljs-meta">@Bean</span><br>   <span class="hljs-keyword">public</span> <span class="hljs-type">ServiceProperties</span> <span class="hljs-title function_">serviceProperties</span><span class="hljs-params">()</span>&#123;<br>       <span class="hljs-type">ServiceProperties</span> <span class="hljs-variable">serviceProperties</span><span class="hljs-operator">=</span><span class="hljs-keyword">new</span> <span class="hljs-title class_">ServiceProperties</span>();<br>       serviceProperties.setService(<span class="hljs-string">&quot;http://127.0.0.1:8881/base/oauth/toke&quot;</span>);<br>       serviceProperties.setAuthenticateAllArtifacts(<span class="hljs-literal">true</span>);<br>       <span class="hljs-keyword">return</span> serviceProperties;<br>   &#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="AuthenticationManagerBuilder中添加Provider"><a href="#AuthenticationManagerBuilder中添加Provider" class="headerlink" title="AuthenticationManagerBuilder中添加Provider"></a>AuthenticationManagerBuilder中添加Provider</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br>    <span class="hljs-keyword">protected</span> <span class="hljs-type">void</span> <span class="hljs-title function_">configure</span><span class="hljs-params">(AuthenticationManagerBuilder auth)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        auth.authenticationProvider(casAuthenticationProvider()).userDetailsService(OauthUserService).passwordEncoder(passwordEncoder()).and().authenticationProvider(mobileAuthenticationProvider());<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="OauthCasServiceImpl"><a href="#OauthCasServiceImpl" class="headerlink" title="OauthCasServiceImpl"></a>OauthCasServiceImpl</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Service(&quot;OauthCasService&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">OauthCasServiceImpl</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">AuthenticationUserDetailsService</span>&lt;CasAssertionAuthenticationToken&gt; &#123;<br><br>	<span class="hljs-meta">@Autowired</span><br>	<span class="hljs-keyword">private</span> com.datanew.service.UserService UserService;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-type">UserDetails</span> <span class="hljs-title function_">loadUserDetails</span><span class="hljs-params">(CasAssertionAuthenticationToken token)</span> <span class="hljs-keyword">throws</span> UsernameNotFoundException &#123;<br>		<span class="hljs-type">String</span> <span class="hljs-variable">name</span> <span class="hljs-operator">=</span> token.getName();<br>		System.out.println(<span class="hljs-string">&quot;获得的用户名：&quot;</span>+name);<br>		<span class="hljs-type">BaseOperator</span> <span class="hljs-variable">userinfo</span> <span class="hljs-operator">=</span> UserService.getUserByUsername(name);<br>		<span class="hljs-keyword">if</span> (userinfo==<span class="hljs-literal">null</span>)&#123;<br>			<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UsernameNotFoundException</span>(name+<span class="hljs-string">&quot;不存在&quot;</span>);<br>		&#125;<br>		<span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span>  <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(name,userinfo.getPassword(), AuthorityUtils.createAuthorityList(<span class="hljs-string">&quot;ROLE_ADMIN&quot;</span>));<br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">OauthUser</span>(userinfo,user);<br>	&#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">OauthCasService</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">UserDetailsService</span> &#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="cas登录流程"><a href="#cas登录流程" class="headerlink" title="cas登录流程"></a>cas登录流程</h1><p>需要cas认证中心支持restfult模式</p>
+<ol>
+<li>客户端使用用户名密码获取TGT</li>
+<li>使用TGT获取ticket</li>
+<li>使用ticket获取access_token</li>
+<li>一般来说需要自己封装一个接口获取token并把token设置到cookie中并重定向到前端项目<br><img src="http://fsmt-blog.oss-cn-beijing.aliyuncs.com/2024/04/08/17125514772252.jpg" srcset="/img/loading.gif" lazyload></li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Spring-Security-OAuth2/" class="category-chain-item">Spring Security OAuth2</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/Spring-Security-OAuth2/CAS/" class="category-chain-item">CAS</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Spring-Security-OAuth2/" class="print-no-link">#Spring Security OAuth2</a>
+      
+        <a href="/tags/CAS/" class="print-no-link">#CAS</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Spring Security OAuth2+CAS（添加cas模式）</div>
+      <div>https://blog.firstmetcs.net/2024/04/08/Spring Security OAuth2&amp;CAS（添加cas模式）/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>firstmetcs</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                    <i class="iconfont icon-nc"></i>
+                  </span>
+                </a>
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="SA - 相同方式共享">
+                    <i class="iconfont icon-sa"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/09/%E5%89%8D%E5%90%8E%E7%AB%AF%E5%88%86%E7%A6%BB%E9%A1%B9%E7%9B%AE%E6%8E%A5%E5%85%A5cas/" title="前后端分离项目接入cas">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">前后端分离项目接入cas</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/30/iStoreOS%E4%BD%BF%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91ddns&amp;https/" title="iStoreOS使用阿里云ddns+https">
+                        <span class="hidden-mobile">iStoreOS使用阿里云ddns+https</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      var light = 'github-light';
+      var dark = 'github-dark';
+      var schema = document.documentElement.getAttribute('data-user-color-scheme');
+      if (schema === 'dark') {
+        schema = dark;
+      } else {
+        schema = light;
+      }
+      window.UtterancesThemeLight = light;
+      window.UtterancesThemeDark = dark;
+      var s = document.createElement('script');
+      s.setAttribute('src', 'https://utteranc.es/client.js');
+      s.setAttribute('repo', 'firstmetcs/blog-comments');
+      s.setAttribute('issue-term', 'pathname');
+      
+      s.setAttribute('theme', schema);
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('comments').appendChild(s);
+    })
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      <div style="font-size: 0.85rem">© 2015-<span id="year">2023</span> <a href="https://firstmetcs.net" target="_blank">firstmetcs.net</a> 版权所有</div><script type="text/javascript">function initCopyrightYear() {document.getElementById("year").innerHTML = new Date().getFullYear();}initCopyrightYear();</script>
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      京ICP备2023003449号
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502051927"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>京公网安备11010502051927号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/caidai.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
